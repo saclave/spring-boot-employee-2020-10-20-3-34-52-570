@@ -3,9 +3,19 @@ package com.thoughtworks.springbootemployee.model;
 import java.util.List;
 
 public class Company {
+    private Integer companyId;
+
+    public Company(Integer companyId, String companyName, int numOfEmployees, List<Employee> employeeList) {
+        this.companyId = companyId;
+        this.companyName = companyName;
+        this.numOfEmployees = numOfEmployees;
+        this.employeeList = employeeList;
+    }
+
+    public Company(){}
+
     private String companyName;
     private int numOfEmployees;
-    private Integer companyId;
     private List<Employee> employeeList;
 
     public String getCompanyName() {
