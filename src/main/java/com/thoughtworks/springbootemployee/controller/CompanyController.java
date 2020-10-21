@@ -6,17 +6,17 @@ import com.thoughtworks.springbootemployee.service.CompanyService;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
     private final CompanyService companyService;
+    private final EmployeeService employeeService;
 
-    public CompanyController(CompanyService companyService){
+    public CompanyController(CompanyService companyService, EmployeeService employeeService){
         this.companyService = companyService;
+        this.employeeService = employeeService;
     }
 
     @GetMapping
@@ -29,9 +29,9 @@ public class CompanyController {
         return companyService.create(company);
     }
 
-    @GetMapping("/employeeList/{companyId}")
+    @GetMapping("/{companyId}/employeeList")
     public List<Employee> getEmployeeList(@PathVariable int companyId) {
-        return companyService.getEmployeesByCompanyId(companyId);
+        return employeeService.getEmployeesByCompanyId(companyId);
     }
 
     @GetMapping("/{companyId}")

@@ -1,7 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Company;
-import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -39,10 +38,6 @@ public class CompanyService {
 
     public void deleteCompany(Integer companyId) {
         companyRepository.deleteCompany(companyId);
-    }
-
-    public List<Employee> getEmployeesByCompanyId(Integer companyId) {
-        return employeeRepository.findEmployeesByCompanyId(companyId);
     }
 
     public List<Company> getPaginationByCompany(long page, long pageSize) {

@@ -54,4 +54,8 @@ public class EmployeeService {
     public List<Employee> getPaginatedEmployee(Long page, Long pageSize) {
         return employeeRepository.findEmployeesByPagination(page, pageSize);
     }
+
+    public List<Employee> getEmployeesByCompanyId(Integer companyId) {
+        return employeeRepository.findEmployeesByCompanyId(companyId);
+    }
 }
