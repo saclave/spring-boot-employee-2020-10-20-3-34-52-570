@@ -18,4 +18,13 @@ public class EmployeeRepository {
         employees.add(employeeRequest);
         return employeeRequest;
     }
+
+    public Employee updateEmployee(Employee employeeRequest) {
+        if (employees.contains(employeeRequest)){
+            return null;
+        }
+        employees.remove(employeeRequest);
+        employees.add(employeeRequest);
+        return employeeRequest;
+    }
 }
