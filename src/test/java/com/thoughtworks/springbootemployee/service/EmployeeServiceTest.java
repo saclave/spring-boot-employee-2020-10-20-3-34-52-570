@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -12,11 +13,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class EmployeeServiceTest {
+
+    private EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
+
+    @BeforeEach
+    void setUp() {
+        employeeRepository = mock(EmployeeRepository.class);
+        employeeService = new EmployeeService(employeeRepository);
+
+    }
+
     @Test
     void should_return_list_of_employees_when_get_all_employees_given_get_request() {
         //given
-        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
 
         //when
         when(employeeRepository.findAllEmployees()).thenReturn(Collections.singletonList(new Employee()));
@@ -29,9 +39,6 @@ class EmployeeServiceTest {
     @Test
     void should_return_created_employee_when_given_an_employee_request() {
         //given
-        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
-
         //when
         Employee employeeRequest = new Employee(1, "Dlo", 23, "Male", 37000000);
         when(employeeRepository.saveEmployee(employeeRequest)).thenReturn(employeeRequest);
@@ -44,8 +51,6 @@ class EmployeeServiceTest {
     @Test
     void should_return_updated_employee_name_when_given_an_update_request() {
         //given
-        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
         Employee employeeRequest = new Employee(1, "Dlo", 23, "Male", 37000000);
 
         //when
