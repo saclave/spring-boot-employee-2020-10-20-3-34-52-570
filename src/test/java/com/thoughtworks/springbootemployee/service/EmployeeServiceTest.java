@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import jdk.nashorn.internal.objects.NativeObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -20,9 +21,23 @@ class EmployeeServiceTest {
 
         //when
         when(employeeRepository.findAllEmployees()).thenReturn(Collections.singletonList(new Employee()));
+        List<Employee> actual = employeeService.getAllEmployees();
 
         //then
-        List<Employee> actual = employeeService.getAllEmployees();
         assertEquals(1, actual.size());
+    }
+
+    @Test
+    void should_return_created_employee_when_given_an_employee_request() {
+        //given
+        EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+
+        //when
+        Employee employeeRequest = new Employee();
+        Employee actual = employeeService.create(employeeRequest);
+
+        //then
+        assertEquals(1, actual.getId());
     }
 }
