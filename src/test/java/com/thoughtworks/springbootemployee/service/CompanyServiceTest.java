@@ -52,20 +52,19 @@ public class CompanyServiceTest {
     @Test
     void should_return_updated_company_info_when_given_an_update_request() {
         //given
-        Company companyRequest = new Company(69, "LODS", 18, Collections.singletonList(new Employee()));
+        Company companyRequest = new Company(69, "LODS", 20, Collections.singletonList(new Employee()));
         Employee employee = new Employee();
+        Company companyUpdate = new Company(69, "MIS", 18, Collections.singletonList(employee));
         //when
         when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
-        companyRequest.setCompanyName("MIS");
-        companyRequest.setEmployeeList(Collections.singletonList(employee));
-        companyRequest.setNumOfEmployees(20);
-        when(companyRepository.updateCompany(companyRequest)).thenReturn(companyRequest);
-        Company actual = companyService.updateCompany(companyRequest);
+        when(companyRepository.updateCompany(companyUpdate)).thenReturn(companyUpdate);
+        when(companyRepository.findById(companyUpdate.getCompanyId())).thenReturn(companyUpdate);
+        Company actual = companyService.updateCompany(companyUpdate.getCompanyId(), companyUpdate);
 
         //then
         assertEquals(69, actual.getCompanyId());
         assertEquals("MIS", actual.getCompanyName());
-        assertEquals(20, actual.getNumOfEmployees());
+        assertEquals(18, actual.getNumOfEmployees());
         assertEquals(Collections.singletonList(employee), actual.getEmployeeList());
     }
 }
