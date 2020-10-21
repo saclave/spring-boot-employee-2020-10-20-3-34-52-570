@@ -10,8 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class EmployeeServiceTest {
 
@@ -51,16 +50,14 @@ class EmployeeServiceTest {
     @Test
     void should_return_updated_employee_info_when_given_an_update_request() {
         //given
-        Employee employeeRequest = new Employee(1, "Dlo", 23, "Male", 37000000);
+        Employee employee = new Employee(1, "Dlo", 21, "Male", 37000000);
+        Employee employeeUpdate = new Employee(1, "Vea", 23, "Female", 25000);
 
         //when
-        when(employeeRepository.saveEmployee(employeeRequest)).thenReturn(employeeRequest);
-        employeeRequest.setName("Vea");
-        employeeRequest.setAge(23);
-        employeeRequest.setGender("Female");
-        employeeRequest.setSalary(25000);
-        when(employeeRepository.updateEmployee(employeeRequest)).thenReturn(employeeRequest);
-        Employee actual = employeeService.update(employeeRequest);
+        when(employeeRepository.saveEmployee(employee)).thenReturn(employee);
+        when(employeeRepository.updateEmployee(employeeUpdate)).thenReturn(employeeUpdate);
+        when(employeeRepository.findEmployeeById(employeeUpdate.getId())).thenReturn(employeeUpdate);
+        Employee actual = employeeService.update(employeeUpdate.getId(), employeeUpdate);
 
         //then
         assertEquals(1, actual.getId());
@@ -73,16 +70,28 @@ class EmployeeServiceTest {
     @Test
     void should_return_employee_when_get_given_a_employee_id() {
         //given
-        Employee vea = new Employee(1, "Vea", 22, "Female", 1000000);
-        Employee joseph = new Employee(2, "Joseph", 21, "Male", 1000000);
+        Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
+        Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
 
         //when
-        when(employeeRepository.saveEmployee(vea)).thenReturn(vea);
-        when(employeeRepository.saveEmployee(joseph)).thenReturn(joseph);
-        when(employeeRepository.findEmployeeById(1)).thenReturn(vea);
-        Employee actual = employeeService.getEmployee(1);
+        when(employeeRepository.saveEmployee(firstEmployee)).thenReturn(firstEmployee);
+        when(employeeRepository.saveEmployee(secondEmployee)).thenReturn(secondEmployee);
+        when(employeeRepository.findEmployeeById(firstEmployee.getId())).thenReturn(firstEmployee);
+        Employee actual = employeeService.getEmployee(firstEmployee.getId());
 
         //then
-        assertSame(vea, actual);
+        assertSame(firstEmployee, actual);
+    }
+
+    @Test
+    void should_remove_employee_when_delete_given_employee_id() {
+        //given
+        Employee employee = new Employee(1, "Vea", 22, "Female", 1000000);
+
+        //when
+        employeeService.deleteEmployee(employee.getId());
+
+        //then
+        verify(employeeRepository, times(1)).deleteEmployee(1);
     }
 }
