@@ -63,7 +63,7 @@ public class EmployeeController {
     public List<Employee> pagination(@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize) {
         return employeeList.stream()
                 .sorted(Comparator.comparing(Employee::getId))
-                .skip(page)
+                .skip(pageSize * (page - 1))
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
