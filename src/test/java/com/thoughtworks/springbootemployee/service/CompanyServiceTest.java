@@ -11,8 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CompanyServiceTest {
 
@@ -23,7 +22,6 @@ public class CompanyServiceTest {
     void setUp() {
         companyRepository = mock(CompanyRepository.class);
         companyService = new CompanyService(companyRepository);
-
     }
 
     @Test
@@ -84,4 +82,17 @@ public class CompanyServiceTest {
         //then
         assertSame(companyRequest, actual);
     }
+
+    @Test
+    void should_remove_employee_when_delete_given_employee_id() {
+        //given
+        Company companyRequest = new Company(69, "LODS", 20, Collections.singletonList(new Employee()));
+
+        //when
+        companyService.deleteCompany(companyRequest.getCompanyId());
+
+        //then
+        verify(companyRepository, times(1)).deleteCompany(69);
+    }
+
 }
