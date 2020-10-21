@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
@@ -93,5 +94,31 @@ class EmployeeServiceTest {
 
         //then
         verify(employeeRepository, times(1)).deleteEmployee(1);
+    }
+
+    @Test
+    void should_return_male_employees_when_filtered_by_gender_given_male() {
+        //given
+        Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
+        Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
+
+        //when
+        when(employeeRepository.saveEmployee(firstEmployee)).thenReturn(firstEmployee);
+        when(employeeRepository.saveEmployee(secondEmployee)).thenReturn(secondEmployee);
+        when(employeeRepository.findEmployeesByGender("Male")).thenReturn(Collections.singletonList(secondEmployee));
+        List<Employee> actual = employeeService.getEmployeesByGender("Male");
+
+        //then
+        assertEquals(1, actual.size());
+    }
+
+    @Test
+    void should_return_page_1_and_2_for_employees_when_pagination_given_page_size_1_page_size_2() {
+        //given
+        Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
+        Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
+
+        //when
+        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
     }
 }
