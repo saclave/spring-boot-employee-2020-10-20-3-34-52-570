@@ -36,4 +36,16 @@ public class CompanyServiceTest {
         //then
         assertEquals(1, actual.size());
     }
+
+    @Test
+    void should_return_created_company_when_given_a_company_request() {
+        //given
+        //when
+        Company companyRequest = new Company(69, "LODS", 18, Collections.singletonList(new Employee()));
+        when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
+        Company actual = companyService.create(companyRequest);
+
+        //then
+        assertEquals(69, actual.getCompanyId());
+    }
 }
