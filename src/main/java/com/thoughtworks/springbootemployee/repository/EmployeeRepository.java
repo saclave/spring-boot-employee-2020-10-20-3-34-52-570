@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thoughtworks.springbootemployee.utils.ExceptionConstants.EMPLOYEE_NOT_FOUND;
 
@@ -45,5 +46,11 @@ public class EmployeeRepository {
                 .orElseThrow(() -> new EmployeeNotFoundException(EMPLOYEE_NOT_FOUND));
 
         employees.remove(deleteEmployee);
+    }
+
+    public List<Employee> findEmployeesByGender(String gender) {
+        return employees.stream()
+                .filter(employee -> employee.getGender().equals(gender))
+                .collect(Collectors.toList());
     }
 }
