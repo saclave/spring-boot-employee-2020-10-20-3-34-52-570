@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,7 +22,6 @@ class EmployeeServiceTest {
     void setUp() {
         employeeRepository = mock(EmployeeRepository.class);
         employeeService = new EmployeeService(employeeRepository);
-
     }
 
     @Test
@@ -70,5 +70,19 @@ class EmployeeServiceTest {
         assertEquals(25000, actual.getSalary());
     }
 
+    @Test
+    void should_return_employee_when_get_given_a_employee_id() {
+        //given
+        Employee vea = new Employee(1, "Vea", 22, "Female", 1000000);
+        Employee joseph = new Employee(2, "Joseph", 21, "Male", 1000000);
 
+        //when
+        when(employeeRepository.saveEmployee(vea)).thenReturn(vea);
+        when(employeeRepository.saveEmployee(joseph)).thenReturn(joseph);
+        when(employeeRepository.findEmployeeById(1)).thenReturn(vea);
+        Employee actual = employeeService.getEmployee(1);
+
+        //then
+        assertSame(vea, actual);
+    }
 }
