@@ -2,6 +2,8 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.CompanyService;
+import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,52 +13,39 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private List<Company> companyList = new ArrayList<>();
-    private List<Employee> employeeList = new ArrayList<>();
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService){
+        this.companyService = companyService;
+    }
 
     @GetMapping
     public List<Company> getCompanyList() {
-        return companyList;
+        return companyService.getAllCompanies();
     }
 
     @PostMapping
     public Company addCompany(@RequestBody Company company) {
-        companyList.add(company);
-        return company;
+        return companyService.create(company);
     }
 
-    @GetMapping("/{companyId}")
+    @GetMapping("/employeeList/{companyId}")
     public List<Employee> getEmployeeList(@PathVariable int companyId) {
-        return employeeList.stream()
-                .filter(employee -> employee.getCompanyId().equals(companyId))
-                .collect(Collectors.toList());
+        return companyService.getEmployeesByCompanyId(companyId);
     }
 
     @GetMapping("/{companyId}")
     public Company getCompany(@PathVariable int companyId) {
-        return companyList.stream()
-                .filter(company -> company.getCompanyId().equals(companyId))
-                .findFirst()
-                .orElse(null);
+        return companyService.getCompany(companyId);
     }
 
     @PutMapping("/{companyId}")
     public Company updateCompany(@PathVariable Integer companyId, @RequestBody Company companyUpdate) {
-        companyList.stream()
-                .filter(company -> company.getCompanyId().equals(companyId))
-                .findFirst()
-                .ifPresent(company -> {
-                    companyList.remove(company);
-                    companyList.add(companyUpdate);
-                });
-        return companyUpdate;
+        return companyService.updateCompany(companyId, companyUpdate);
     }
 
     @DeleteMapping("/{companyId}")
     public void deleteCompany(@PathVariable Integer companyId) {
-        companyList.stream()
-                .filter(company -> company.getCompanyId().equals(companyId))
-                .findFirst()
-                .ifPresent(companyList::remove);
+        companyService.deleteCompany(companyId);
     }
 }
