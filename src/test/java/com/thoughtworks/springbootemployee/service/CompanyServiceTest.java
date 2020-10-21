@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,7 +59,7 @@ public class CompanyServiceTest {
         //when
         when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
         when(companyRepository.updateCompany(companyUpdate)).thenReturn(companyUpdate);
-        when(companyRepository.findById(companyUpdate.getCompanyId())).thenReturn(companyUpdate);
+        when(companyRepository.findByCompanyId(companyUpdate.getCompanyId())).thenReturn(companyUpdate);
         Company actual = companyService.updateCompany(companyUpdate.getCompanyId(), companyUpdate);
 
         //then
@@ -66,5 +67,21 @@ public class CompanyServiceTest {
         assertEquals("MIS", actual.getCompanyName());
         assertEquals(18, actual.getNumOfEmployees());
         assertEquals(Collections.singletonList(employee), actual.getEmployeeList());
+    }
+
+    @Test
+    void should_return_company_when_get_given_a_company_id() {
+        //given
+        Company companyRequest = new Company(69, "LODS", 20, Collections.singletonList(new Employee()));
+        Company companyUpdate = new Company(69, "MIS", 18, Collections.singletonList(new Employee()));
+
+        //when
+        when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
+        when(companyRepository.saveCompany(companyUpdate)).thenReturn(companyUpdate);
+        when(companyRepository.findByCompanyId(companyRequest.getCompanyId())).thenReturn(companyRequest);
+        Company actual = companyService.getCompany(companyRequest.getCompanyId());
+
+        //then
+        assertSame(companyRequest, actual);
     }
 }
