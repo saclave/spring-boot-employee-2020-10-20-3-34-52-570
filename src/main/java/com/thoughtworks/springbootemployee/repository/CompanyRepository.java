@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.repository;
 
+import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 
@@ -26,10 +27,10 @@ public class CompanyRepository {
         return companyRequest;
     }
 
-    public Company findById(Integer companyId) {
+    public Company findByCompanyId(Integer companyId) {
         return companyList.stream()
                 .filter(company -> company.getCompanyId().equals(companyId))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new CompanyNotFoundException("Company Not Found"));
     }
 }

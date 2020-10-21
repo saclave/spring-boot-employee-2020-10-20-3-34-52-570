@@ -18,17 +18,18 @@ public class CompanyService {
 
     public Company updateCompany(Integer companyId, Company companyRequest) {
         Company company = companyRepository
-                .findById(companyId);
-
-        if(company != null){
-            if(companyRequest.getCompanyName() != null){
+                .findByCompanyId(companyId);
+        if(companyRequest.getCompanyName() != null){
                 company.setCompanyName(companyRequest.getCompanyName());
-            }
-            if(companyRequest.getNumOfEmployees() != null){
-                company.setNumOfEmployees(companyRequest.getNumOfEmployees());
-            }
-            return company;
         }
-        throw new RuntimeException("Company not found!");
+
+        if(companyRequest.getNumOfEmployees() != null){
+                company.setNumOfEmployees(companyRequest.getNumOfEmployees());
+        }
+        return company;
+    }
+
+    public Company getCompany(Integer companyId) {
+        return companyRepository.findByCompanyId(companyId);
     }
 }
