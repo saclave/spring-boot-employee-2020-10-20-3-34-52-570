@@ -115,4 +115,19 @@ public class CompanyServiceTest {
         //then
         assertSame(2, actual.size());
     }
+
+    @Test
+    void should_return_page_1_and_2_for_companies_when_pagination_given_page_size_1_page_size_2() {
+        //given
+        Company company1 = new Company(69, "LODS", Collections.singletonList(new Employee()));
+        Company company2 = new Company(69, "MIS", Collections.singletonList(new Employee()));
+        Company company3 = new Company(69, "MIS", Collections.singletonList(new Employee()));
+
+        //when
+        when(companyRepository.findAllCompanies()).thenReturn(asList(company1, company2, company3));
+        when(companyRepository.findCompanyPagination(2L, 3L)).thenReturn(asList(company2, company3));
+
+        List<Company> actual = companyService.getPaginationByCompany(2L, 3L);
+        assertEquals(2, actual.size());
+    }
 }
