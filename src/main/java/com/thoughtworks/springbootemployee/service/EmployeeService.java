@@ -13,6 +13,6 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllEmployees() {
-        return null;
+        return employeeRepository.findAllEmployees();
     }
 }

@@ -16,12 +16,12 @@ class EmployeeServiceTest {
     void should_return_list_of_employees_when_get_all_employees_given_get_request() {
         //given
         EmployeeRepository employeeRepository = mock(EmployeeRepository.class);
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
 
         //when
         when(employeeRepository.findAllEmployees()).thenReturn(Collections.singletonList(new Employee()));
 
         //then
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
         List<Employee> actual = employeeService.getAllEmployees();
         assertEquals(1, actual.size());
     }
