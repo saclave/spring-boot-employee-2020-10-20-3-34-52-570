@@ -23,4 +23,8 @@ public class EmployeeService {
     public Employee update(Employee employeeRequest) {
         return employeeRepository.updateEmployee(employeeRequest);
     }
+
+    public Employee getEmployee(Integer employeeId) {
+        return employeeRepository.findEmployeeById(employeeId);
+    }
 }
