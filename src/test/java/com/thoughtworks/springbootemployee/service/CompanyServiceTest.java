@@ -26,7 +26,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_list_of_employees_when_get_all_employees_given_get_request() {
+    void should_return_list_of_companies_when_get_all_companies_given_get_request() {
         //given
 
         //when
