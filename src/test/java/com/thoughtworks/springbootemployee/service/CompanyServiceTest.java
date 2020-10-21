@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +18,13 @@ public class CompanyServiceTest {
 
     private CompanyRepository companyRepository;
     private CompanyService companyService;
+    private EmployeeRepository employeeRepository;
 
     @BeforeEach
     void setUp() {
         companyRepository = mock(CompanyRepository.class);
-        companyService = new CompanyService(companyRepository);
+        employeeRepository = mock(EmployeeRepository.class);
+        companyService = new CompanyService(companyRepository, employeeRepository);
     }
 
     @Test

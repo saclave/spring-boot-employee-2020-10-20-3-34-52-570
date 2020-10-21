@@ -2,18 +2,16 @@ package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
-import com.thoughtworks.springbootemployee.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundException.COMPANY_NOT_FOUND;
 
 public class CompanyRepository {
     List<Company> companyList = new ArrayList<>();
 
-    public List<Company> findAllCompanies() { return null; }
+    public List<Company> findAllCompanies() { return companyList; }
 
     public Company saveCompany(Company companyRequest) {
         companyList.add(companyRequest);
