@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundException.COMPANY_NOT_FOUND;
+
 public class CompanyRepository {
     List<Company> companyList = new ArrayList<>();
 
@@ -31,6 +33,15 @@ public class CompanyRepository {
         return companyList.stream()
                 .filter(company -> company.getCompanyId().equals(companyId))
                 .findFirst()
-                .orElseThrow(() -> new CompanyNotFoundException("Company Not Found"));
+                .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND));
+    }
+
+    public void deleteCompany(Integer companyId) {
+        Company deleteCompany = companyList.stream()
+                .filter(company -> company.getCompanyId().equals(companyId))
+                .findFirst()
+                .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND));
+
+        companyList.remove(deleteCompany);
     }
 }

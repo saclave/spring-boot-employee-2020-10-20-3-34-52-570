@@ -32,4 +32,9 @@ public class CompanyService {
     public Company getCompany(Integer companyId) {
         return companyRepository.findByCompanyId(companyId);
     }
+
+    public void deleteCompany(Integer companyId) {
+        companyRepository.deleteCompany(companyId);
+    }
+
 }
