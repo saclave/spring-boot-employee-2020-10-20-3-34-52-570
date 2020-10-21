@@ -49,17 +49,26 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void should_return_updated_employee_name_when_given_an_update_request() {
+    void should_return_updated_employee_info_when_given_an_update_request() {
         //given
         Employee employeeRequest = new Employee(1, "Dlo", 23, "Male", 37000000);
 
         //when
         when(employeeRepository.saveEmployee(employeeRequest)).thenReturn(employeeRequest);
-        employeeRequest.setName("Joseph");
+        employeeRequest.setName("Vea");
+        employeeRequest.setAge(23);
+        employeeRequest.setGender("Female");
+        employeeRequest.setSalary(25000);
         when(employeeRepository.updateEmployee(employeeRequest)).thenReturn(employeeRequest);
         Employee actual = employeeService.update(employeeRequest);
 
         //then
-        assertEquals("Joseph", actual.getName());
+        assertEquals(1, actual.getId());
+        assertEquals("Vea", actual.getName());
+        assertEquals(23, actual.getAge());
+        assertEquals("Female", actual.getGender());
+        assertEquals(25000, actual.getSalary());
     }
+
+
 }
