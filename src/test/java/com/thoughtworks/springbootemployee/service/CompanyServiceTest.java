@@ -31,7 +31,7 @@ public class CompanyServiceTest {
 
         //when
         when(companyRepository.findAllCompanies()).thenReturn(Collections.singletonList(new Company()));
-        List<Employee> actual = companyService.getAllCompanies();
+        List<Company> actual = companyService.getAllCompanies();
 
         //then
         assertEquals(1, actual.size());
