@@ -5,7 +5,9 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundException.COMPANY_NOT_FOUND;
 
@@ -43,4 +45,13 @@ public class CompanyRepository {
 
         companyList.remove(deleteCompany);
     }
+
+    public List<Company> findCompanyPagination(Long page, Long pageSize) {
+        return companyList.stream()
+                .sorted(Comparator.comparing(Company::getCompanyId))
+                .skip(pageSize * (page - 1))
+                .limit(pageSize)
+                .collect(Collectors.toList());
+    }
+
 }
