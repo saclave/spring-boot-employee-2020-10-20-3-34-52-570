@@ -1,7 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Company;
-import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 
 import java.util.List;
@@ -17,5 +16,19 @@ public class CompanyService {
 
     public Company create(Company company) { return companyRepository.saveCompany(company); }
 
-    public Company updateCompany(Company companyRequest) { return companyRepository.updateCompany(companyRequest); }
+    public Company updateCompany(Integer companyId, Company companyRequest) {
+        Company company = companyRepository
+                .findById(companyId);
+
+        if(company != null){
+            if(companyRequest.getCompanyName() != null){
+                company.setCompanyName(companyRequest.getCompanyName());
+            }
+            if(companyRequest.getNumOfEmployees() != null){
+                company.setNumOfEmployees(companyRequest.getNumOfEmployees());
+            }
+            return company;
+        }
+        throw new RuntimeException("Company not found!");
+    }
 }

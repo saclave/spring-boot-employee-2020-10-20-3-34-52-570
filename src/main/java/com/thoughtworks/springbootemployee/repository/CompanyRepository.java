@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.model.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CompanyRepository {
     List<Company> companyList = new ArrayList<>();
@@ -23,5 +24,12 @@ public class CompanyRepository {
         companyList.remove(companyRequest);
         companyList.add(companyRequest);
         return companyRequest;
+    }
+
+    public Company findById(Integer companyId) {
+        return companyList.stream()
+                .filter(company -> company.getCompanyId().equals(companyId))
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 public class Company {
     private Integer companyId;
 
-    public Company(Integer companyId, String companyName, int numOfEmployees, List<Employee> employeeList) {
+    public Company(Integer companyId, String companyName, Integer numOfEmployees, List<Employee> employeeList) {
         this.companyId = companyId;
         this.companyName = companyName;
         this.numOfEmployees = numOfEmployees;
@@ -26,7 +26,7 @@ public class Company {
         this.companyName = companyName;
     }
 
-    public int getNumOfEmployees() {
+    public Integer getNumOfEmployees() {
         return numOfEmployees;
     }
 
