@@ -31,9 +31,8 @@ public class Employee {
         return companyId;
     }
 
-    public Employee setCompanyId(Integer companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
-        return this;
     }
 
     public String getName() {

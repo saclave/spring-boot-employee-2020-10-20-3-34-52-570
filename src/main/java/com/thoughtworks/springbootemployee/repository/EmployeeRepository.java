@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,20 @@ public class EmployeeRepository {
     public List<Employee> findEmployeesByGender(String gender) {
         return employees.stream()
                 .filter(employee -> employee.getGender().equals(gender))
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> findEmployeesByPagination(Long page, Long pageSize) {
+        return employees.stream()
+                .sorted(Comparator.comparing(Employee::getId))
+                .skip(pageSize * (page - 1))
+                .limit(pageSize)
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> findEmployeesByCompanyId(Integer companyId) {
+        return employees.stream()
+                .filter(employee -> employee.getCompanyId().equals(companyId))
                 .collect(Collectors.toList());
     }
 }

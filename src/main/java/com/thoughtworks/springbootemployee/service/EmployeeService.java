@@ -48,4 +48,8 @@ public class EmployeeService {
     public List<Employee> getEmployeesByGender(String gender) {
         return employeeRepository.findEmployeesByGender(gender);
     }
+
+    public List<Employee> getPaginatedEmployee(Long page, Long pageSize) {
+        return employeeRepository.findEmployeesByPagination(page, pageSize);
+    }
 }

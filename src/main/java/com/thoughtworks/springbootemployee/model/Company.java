@@ -5,17 +5,16 @@ import java.util.List;
 public class Company {
     private Integer companyId;
 
-    public Company(Integer companyId, String companyName, Integer numOfEmployees, List<Employee> employeeList) {
+    public Company(Integer companyId, String companyName, List<Employee> employeeList) {
         this.companyId = companyId;
         this.companyName = companyName;
-        this.numOfEmployees = numOfEmployees;
         this.employeeList = employeeList;
     }
 
-    public Company(){}
+    public Company() {
+    }
 
     private String companyName;
-    private int numOfEmployees;
     private List<Employee> employeeList;
 
     public String getCompanyName() {
@@ -27,11 +26,7 @@ public class Company {
     }
 
     public Integer getNumOfEmployees() {
-        return numOfEmployees;
-    }
-
-    public void setNumOfEmployees(int numOfEmployees) {
-        this.numOfEmployees = numOfEmployees;
+        return employeeList.size();
     }
 
     public Integer getCompanyId() {

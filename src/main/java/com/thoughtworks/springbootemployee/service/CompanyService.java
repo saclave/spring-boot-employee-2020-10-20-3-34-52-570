@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 
@@ -15,20 +16,18 @@ public class CompanyService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Company> getAllCompanies() { return companyRepository.findAllCompanies(); }
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAllCompanies();
+    }
 
-    public Company create(Company company) { return companyRepository.saveCompany(company); }
+    public Company create(Company company) {
+        return companyRepository.saveCompany(company);
+    }
 
     public Company updateCompany(Integer companyId, Company companyRequest) {
-        Company company = companyRepository
-                .findByCompanyId(companyId);
-
-        if(companyRequest.getCompanyName() != null){
-                company.setCompanyName(companyRequest.getCompanyName());
-        }
-
-        if(companyRequest.getNumOfEmployees() != null){
-                company.setNumOfEmployees(companyRequest.getNumOfEmployees());
+        Company company = companyRepository.findByCompanyId(companyId);
+        if (companyRequest.getCompanyName() != null) {
+            company.setCompanyName(companyRequest.getCompanyName());
         }
         return company;
     }
@@ -41,8 +40,7 @@ public class CompanyService {
         companyRepository.deleteCompany(companyId);
     }
 
-//    public List<Employee> findCompanyEmployees(Integer companyId){
-//        return employeeRepository.stream()
-//                .findEmployeesByCompanyId(companyId);
-//    }
+    public List<Employee> getEmployeesByCompanyId(Integer companyId) {
+        return employeeRepository.findEmployeesByCompanyId(companyId);
+    }
 }

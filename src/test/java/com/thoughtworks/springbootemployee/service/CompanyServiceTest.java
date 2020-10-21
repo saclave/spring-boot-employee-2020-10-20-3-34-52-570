@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -43,7 +44,7 @@ public class CompanyServiceTest {
     void should_return_created_company_when_given_a_company_request() {
         //given
         //when
-        Company companyRequest = new Company(69, "LODS", 18, Collections.singletonList(new Employee()));
+        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
         when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
         Company actual = companyService.create(companyRequest);
 
@@ -54,9 +55,9 @@ public class CompanyServiceTest {
     @Test
     void should_return_updated_company_info_when_given_an_update_request() {
         //given
-        Company companyRequest = new Company(69, "LODS", 20, Collections.singletonList(new Employee()));
+        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
         Employee employee = new Employee();
-        Company companyUpdate = new Company(69, "MIS", 18, Collections.singletonList(employee));
+        Company companyUpdate = new Company(69, "MIS", Collections.singletonList(employee));
         //when
         when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
         when(companyRepository.updateCompany(companyUpdate)).thenReturn(companyUpdate);
@@ -66,15 +67,15 @@ public class CompanyServiceTest {
         //then
         assertEquals(69, actual.getCompanyId());
         assertEquals("MIS", actual.getCompanyName());
-        assertEquals(18, actual.getNumOfEmployees());
+        assertEquals(1, actual.getNumOfEmployees());
         assertEquals(Collections.singletonList(employee), actual.getEmployeeList());
     }
 
     @Test
     void should_return_company_when_get_given_a_company_id() {
         //given
-        Company companyRequest = new Company(69, "LODS", 20, Collections.singletonList(new Employee()));
-        Company companyUpdate = new Company(69, "MIS", 18, Collections.singletonList(new Employee()));
+        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
+        Company companyUpdate = new Company(69, "MIS", Collections.singletonList(new Employee()));
 
         //when
         when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
@@ -89,7 +90,7 @@ public class CompanyServiceTest {
     @Test
     void should_remove_employee_when_delete_given_employee_id() {
         //given
-        Company companyRequest = new Company(69, "LODS", 20, Collections.singletonList(new Employee()));
+        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
 
         //when
         companyService.deleteCompany(companyRequest.getCompanyId());
@@ -98,4 +99,20 @@ public class CompanyServiceTest {
         verify(companyRepository, times(1)).deleteCompany(69);
     }
 
+
+    @Test
+    void should_return_employees_when_find_given_company_id() {
+        //given
+        Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
+        Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
+        firstEmployee.setCompanyId(69);
+        secondEmployee.setCompanyId(69);
+        Company companyRequest = new Company(69, "LODS", asList(firstEmployee, secondEmployee));
+
+        //when
+        when(employeeRepository.findEmployeesByCompanyId(companyRequest.getCompanyId())).thenReturn(asList(firstEmployee, secondEmployee));
+        List<Employee> actual = companyService.getEmployeesByCompanyId(69);
+        //then
+        assertSame(2, actual.size());
+    }
 }

@@ -55,7 +55,7 @@ class EmployeeServiceTest {
         Employee employeeUpdate = new Employee(1, "Vea", 23, "Female", 25000);
 
         //when
-        when(employeeRepository.saveEmployee(employee)).thenReturn(employee);
+        when(employeeRepository.findAllEmployees()).thenReturn(Collections.singletonList(employee));
         when(employeeRepository.updateEmployee(employeeUpdate)).thenReturn(employeeUpdate);
         when(employeeRepository.findEmployeeById(employeeUpdate.getId())).thenReturn(employeeUpdate);
         Employee actual = employeeService.update(employeeUpdate.getId(), employeeUpdate);
@@ -75,8 +75,7 @@ class EmployeeServiceTest {
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
 
         //when
-        when(employeeRepository.saveEmployee(firstEmployee)).thenReturn(firstEmployee);
-        when(employeeRepository.saveEmployee(secondEmployee)).thenReturn(secondEmployee);
+        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
         when(employeeRepository.findEmployeeById(firstEmployee.getId())).thenReturn(firstEmployee);
         Employee actual = employeeService.getEmployee(firstEmployee.getId());
 
@@ -103,8 +102,7 @@ class EmployeeServiceTest {
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
 
         //when
-        when(employeeRepository.saveEmployee(firstEmployee)).thenReturn(firstEmployee);
-        when(employeeRepository.saveEmployee(secondEmployee)).thenReturn(secondEmployee);
+        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
         when(employeeRepository.findEmployeesByGender("Male")).thenReturn(Collections.singletonList(secondEmployee));
         List<Employee> actual = employeeService.getEmployeesByGender("Male");
 
@@ -117,8 +115,13 @@ class EmployeeServiceTest {
         //given
         Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
+        Employee thirdEmployee = new Employee(3, "Dlo", 23, "Male", 37000000);
 
         //when
-        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
+        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee, thirdEmployee));
+        when(employeeRepository.findEmployeesByPagination(2L, 3L)).thenReturn(asList(secondEmployee, thirdEmployee));
+
+        List<Employee> actual = employeeService.getPaginatedEmployee(2L, 3L);
+        assertEquals(2, actual.size());
     }
 }
