@@ -6,14 +6,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.thoughtworks.springbootemployee.utils.ExceptionConstants.EMPLOYEE_NOT_FOUND;
 
 @Repository
 public class EmployeeRepository {
-    List<Employee> employees = new ArrayList<>();
+    private List<Employee> employees = new ArrayList<>();
 
     public List<Employee> findAllEmployees() {
-        return null;
+        return employees;
     }
 
     public Employee saveEmployee(Employee employeeRequest) {
@@ -22,8 +23,8 @@ public class EmployeeRepository {
     }
 
     public Employee updateEmployee(Employee employeeRequest) {
-        if (employees.contains(employeeRequest)){
-            return null;
+        if (employees.contains(employeeRequest)) {
+            throw new EmployeeNotFoundException(EMPLOYEE_NOT_FOUND);
         }
         employees.remove(employeeRequest);
         employees.add(employeeRequest);
@@ -34,13 +35,15 @@ public class EmployeeRepository {
         return employees.stream()
                 .filter(employee -> employee.getId().equals(employeeId))
                 .findFirst()
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee Not Found"));
+                .orElseThrow(() -> new EmployeeNotFoundException(EMPLOYEE_NOT_FOUND));
     }
 
     public void deleteEmployee(int employeeId) {
-        employees.stream()
+        Employee deleteEmployee = employees.stream()
                 .filter(employee -> employee.getId().equals(employeeId))
                 .findFirst()
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee Not Found"));
+                .orElseThrow(() -> new EmployeeNotFoundException(EMPLOYEE_NOT_FOUND));
+
+        employees.remove(deleteEmployee);
     }
 }
