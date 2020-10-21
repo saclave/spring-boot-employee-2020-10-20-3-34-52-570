@@ -34,7 +34,8 @@ class EmployeeServiceTest {
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 
         //when
-        Employee employeeRequest = new Employee();
+        Employee employeeRequest = new Employee(1, "Dlo", 23, "Male", 37000000);
+        when(employeeRepository.saveEmployee(employeeRequest)).thenReturn(employeeRequest);
         Employee actual = employeeService.create(employeeRequest);
 
         //then
