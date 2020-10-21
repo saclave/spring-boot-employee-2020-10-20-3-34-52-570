@@ -36,4 +36,11 @@ public class EmployeeRepository {
                 .findFirst()
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee Not Found"));
     }
+
+    public void deleteEmployee(int employeeId) {
+        employees.stream()
+                .filter(employee -> employee.getId().equals(employeeId))
+                .findFirst()
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee Not Found"));
+    }
 }
