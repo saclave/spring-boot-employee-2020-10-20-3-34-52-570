@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.model;
 
 public class Employee {
     private Integer id;
+    private Integer companyId;
     private String name;
     private int age;
     private String gender;
@@ -24,6 +25,15 @@ public class Employee {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public Employee setCompanyId(Integer companyId) {
+        this.companyId = companyId;
+        return this;
     }
 
     public String getName() {
