@@ -17,8 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -140,4 +139,40 @@ class CompanyIntegrationTest {
         List<Employee> employees = employeeRepository.findAll();
         Assertions.assertEquals(3, employees.size());
     }
+
+//    @Test
+//    void should_update_company_when_put_specific_company_given_put_company_request_and_details() throws Exception {
+//        //given
+//        Employee employeeRequest = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
+//
+//        Company companyRequest = companyRepository.save(new Company(1, "LODS", Collections.singletonList(employeeRequest)));
+//        String updatedCompanyAsJson = "{\n" +
+//                "  \"companyName\": \"maria\"\n" +
+//                "}";
+//
+//        //when
+//        //then
+//        mockMvc.perform(put("/companies/" + companyRequest.getCompanyId())
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(updatedCompanyAsJson))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$[0].companyId").isNumber())
+//                .andExpect(jsonPath("$[0].companyName").value("LODS"));
+//    }
+
+    @Test
+    void should_delete_company_when_delete_request_given_delete_company_request() throws Exception {
+        //given
+        Employee employeeRequest = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
+
+        Company companyRequest = companyRepository.save(new Company(1, "LODS", Collections.singletonList(employeeRequest)));
+
+        //when
+        //then
+        mockMvc.perform(delete("/companies/" + companyRequest.getCompanyId()))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$[0].companyId").doesNotExist())
+                .andExpect(jsonPath("$[0].companyName").doesNotExist());
+    }
+
 }
