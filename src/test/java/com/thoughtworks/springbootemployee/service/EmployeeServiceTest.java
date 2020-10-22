@@ -4,6 +4,8 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -106,18 +108,22 @@ class EmployeeServiceTest {
         assertEquals(1, actual.size());
     }
 
-//    @Test
-//    void should_return_page_1_and_2_for_employees_when_pagination_given_page_size_1_page_size_2() {
-//        //given
-//        Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
-//        Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
-//        Employee thirdEmployee = new Employee(3, "Dlo", 23, "Male", 37000000);
-//
-//        //when
-//        when(employeeRepositoryLegacy.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee, thirdEmployee));
-//        when(employeeRepositoryLegacy.findEmployeesByPagination(2L, 3L)).thenReturn(asList(secondEmployee, thirdEmployee));
-//
-//        List<Employee> actual = employeeService.getPaginatedEmployee(2L, 3L);
-//        assertEquals(2, actual.size());
-//    }
+    @Test
+    void should_return_page_1_and_2_for_employees_when_pagination_given_page_size_1_page_size_2() {
+        //given
+        Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
+        Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
+        Employee thirdEmployee = new Employee(3, "Dlo", 23, "Male", 37000000);
+        Page<Employee> employeePage = mock(Page.class);
+
+        //when
+        when(employeeRepository.save(firstEmployee)).thenReturn(firstEmployee);
+        when(employeeRepository.save(secondEmployee)).thenReturn(secondEmployee);
+        when(employeeRepository.save(thirdEmployee)).thenReturn(thirdEmployee);
+        when(employeeRepository.findAll(PageRequest.of(2, 3))).thenReturn(employeePage);
+        when(employeePage.toList()).thenReturn(asList(secondEmployee, thirdEmployee));
+
+        List<Employee> actual = employeeService.getPaginatedEmployee(2, 3);
+        assertEquals(2, actual.size());
+    }
 }
