@@ -135,4 +135,34 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$[0].salary").doesNotExist());
     }
 
+    @Test
+    void should_return_list_of_specific_employees_when_get_employees_given_get_request_for_specific_gender() throws Exception {
+        //given
+        Employee maleEmployeeOne = new Employee(1, "joseph", 22, "male", 1000000);
+        Employee femaleEmployeeOne = new Employee(2, "maria", 19, "female", 200000);
+        Employee maleEmployeeTwo = new Employee(3, "jerick", 25, "male", 500);
+        employeeRepository.save(maleEmployeeOne);
+        employeeRepository.save(femaleEmployeeOne);
+        employeeRepository.save(maleEmployeeTwo);
+
+        //when
+        //then
+        mockMvc.perform(get("/employees?gender=male"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].name").value("joseph"))
+                .andExpect(jsonPath("$[0].age").value(22))
+                .andExpect(jsonPath("$[0].gender").value("male"))
+                .andExpect(jsonPath("$[0].salary").value(1000000))
+                .andExpect(jsonPath("$[1].id").isNumber())
+                .andExpect(jsonPath("$[1].name").value("jerick"))
+                .andExpect(jsonPath("$[1].age").value(25))
+                .andExpect(jsonPath("$[1].gender").value("male"))
+                .andExpect(jsonPath("$[1].salary").value(500))
+                .andExpect(jsonPath("$[2].id").doesNotExist());
+
+        List<Employee> employees = employeeRepository.findAll();
+        Assertions.assertEquals(3, employees.size());
+    }
+
 }
