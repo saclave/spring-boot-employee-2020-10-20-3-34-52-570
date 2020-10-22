@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -55,4 +56,10 @@ public class CompanyRepository {
                 .collect(Collectors.toList());
     }
 
+    public void deleteCompanyEmployeesByCompanyId(Integer companyId) {
+        companyList.stream()
+                .filter(company -> company.getCompanyId().equals(companyId))
+                .findFirst()
+                .ifPresent(company -> company.getEmployeeList().clear());
+    }
 }

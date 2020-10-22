@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class CompanyController {
     private final CompanyService companyService;
     private final EmployeeService employeeService;
 
-    public CompanyController(CompanyService companyService, EmployeeService employeeService){
+    public CompanyController(CompanyService companyService, EmployeeService employeeService) {
         this.companyService = companyService;
         this.employeeService = employeeService;
     }
@@ -25,6 +26,7 @@ public class CompanyController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Company addCompany(@RequestBody Company company) {
         return companyService.create(company);
     }
@@ -49,6 +51,13 @@ public class CompanyController {
         companyService.deleteCompany(companyId);
     }
 
-//    @DeleteMapping("/{companyId}/companyEmployees")
-//    public void deleteCompanyEmployees(@PathVariable Integer companyId) { companyService.deleteCompanyEmployees(companyId); }
+    @DeleteMapping("/{companyId}/companyName")
+    public void deleteCompanyEmployees(@PathVariable Integer companyId) {
+        companyService.deleteCompanyEmployees(companyId);
+    }
+
+    @GetMapping(params = {"page", "pageSize"})
+    public List<Company> getPaginated(@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize) {
+        return companyService.getPaginatedEmployee(page, pageSize);
+    }
 }
