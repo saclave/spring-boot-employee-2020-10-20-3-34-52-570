@@ -2,7 +2,9 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.CompanyRepositoryLegacy;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
 import org.springframework.stereotype.Service;
 
@@ -10,20 +12,23 @@ import java.util.List;
 
 @Service
 public class CompanyService {
-    private final CompanyRepositoryLegacy companyRepositoryLegacy;
-    private final EmployeeRepositoryLegacy employeeRepositoryLegacy;
+    private CompanyRepositoryLegacy companyRepositoryLegacy;
+    private EmployeeRepositoryLegacy employeeRepositoryLegacy;
+    private EmployeeRepository employeeRepository;
+    private CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepositoryLegacy companyRepositoryLegacy, EmployeeRepositoryLegacy employeeRepositoryLegacy) {
-        this.companyRepositoryLegacy = companyRepositoryLegacy;
-        this.employeeRepositoryLegacy = employeeRepositoryLegacy;
+    public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository) {
+        this.companyRepository = companyRepository;
+        this.employeeRepository = employeeRepository;
     }
 
+
     public List<Company> getAllCompanies() {
-        return companyRepositoryLegacy.findAllCompanies();
+        return companyRepository.findAll();
     }
 
     public Company create(Company company) {
-        return companyRepositoryLegacy.saveCompany(company);
+        return companyRepository.save(company);
     }
 
     public Company updateCompany(Integer companyId, Company companyRequest) {
@@ -48,6 +53,10 @@ public class CompanyService {
 
     public List<Employee> getEmployeesByCompanyId(int companyId) {
         return employeeRepositoryLegacy.findEmployeesByCompanyId(companyId);
+//        return employeeRepository
+//                .findById(companyId)
+//                .map(Company::getEmployeeList)
+//                .orElse(null);
     }
 
     public List<Company> getPaginatedEmployee(Long page, Long pageSize) {

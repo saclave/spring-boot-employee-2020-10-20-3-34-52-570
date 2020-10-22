@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
 import org.springframework.stereotype.Service;
 
@@ -9,21 +10,22 @@ import java.util.List;
 @Service
 public class EmployeeService {
     private EmployeeRepositoryLegacy employeeRepositoryLegacy;
+    private EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepositoryLegacy employeeRepositoryLegacy) {
-        this.employeeRepositoryLegacy = employeeRepositoryLegacy;
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Employee> getAllEmployees() {
-        return employeeRepositoryLegacy.findAllEmployees();
+        return employeeRepository.findAll();
     }
 
     public Employee create(Employee employeeRequest) {
-        return employeeRepositoryLegacy.saveEmployee(employeeRequest);
+        return employeeRepository.save(employeeRequest);
     }
 
     public Employee update(Integer employeeId, Employee employeeUpdate) {
-        Employee employee = employeeRepositoryLegacy.findEmployeeById(employeeId);
+        Employee employee = employeeRepository.findById(employeeId).orElse(null);
         if (employeeUpdate.getName() != null) {
             employee.setName(employeeUpdate.getName());
         }
@@ -40,11 +42,11 @@ public class EmployeeService {
     }
 
     public Employee getEmployee(Integer employeeId) {
-        return employeeRepositoryLegacy.findEmployeeById(employeeId);
+        return employeeRepository.findById(employeeId).orElse(null);
     }
 
     public void deleteEmployee(int employeeId) {
-        employeeRepositoryLegacy.deleteEmployee(employeeId);
+        employeeRepository.deleteById(employeeId);
     }
 
     public List<Employee> getEmployeesByGender(String gender) {
