@@ -57,7 +57,7 @@ public class CompanyController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public List<Company> getPaginated(@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize) {
-        return companyService.getPaginatedEmployee(page, pageSize);
+    public List<Company> getPaginated(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+        return companyService.getPaginationByCompany(page, pageSize);
     }
 }

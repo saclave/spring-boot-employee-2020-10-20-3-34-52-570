@@ -53,11 +53,6 @@ public class CompanyService {
                 .orElse(null);
     }
 
-    public List<Company> getPaginatedEmployee(Long page, Long pageSize) {
-       // return companyRepositoryLegacy.findCompanyPagination(page, pageSize);
-        return null;
-    }
-
     public void deleteCompanyEmployees(Integer companyId) {
         List<Employee> employees = companyRepository.findById(companyId)
                 .map(Company::getEmployeeList)
