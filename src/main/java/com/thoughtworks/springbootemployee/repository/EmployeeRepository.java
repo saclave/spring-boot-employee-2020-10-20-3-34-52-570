@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.thoughtworks.springbootemployee.utils.ExceptionConstants.EMPLOYEE_NOT_FOUND;
+import static com.thoughtworks.springbootemployee.exception.EmployeeNotFoundException.EMPLOYEE_NOT_FOUND;
 
 @Repository
 public class EmployeeRepository {
