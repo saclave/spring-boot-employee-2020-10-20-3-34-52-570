@@ -82,12 +82,11 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_employee_when_get_specific_employee_given_get_employee_request() throws Exception {
         //given
-        Employee employee = new Employee(1, "joseph", 22, "male", 1000000);
-        employeeRepository.save(employee);
+        Employee employee = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
 
         //when
         //then
-        mockMvc.perform(get("/employees/1"))
+        mockMvc.perform(get("/employees/" + employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("joseph"))
@@ -99,8 +98,7 @@ class EmployeeIntegrationTest {
     @Test
     void should_update_employee_when_put_specific_employee_given_put_employee_request_and_details() throws Exception {
         //given
-        Employee employee = new Employee(1, "joseph", 22, "male", 1000000);
-        employeeRepository.save(employee);
+        Employee employee = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
         String updatedEmployeeAsJson = "{\n" +
                 "  \"name\": \"maria\",\n" +
                 "  \"age\": 19,\n" +
@@ -110,7 +108,7 @@ class EmployeeIntegrationTest {
 
         //when
         //then
-        mockMvc.perform(put("/employees/1")
+        mockMvc.perform(put("/employees/" + employee.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedEmployeeAsJson))
                 .andExpect(status().isOk())
@@ -124,12 +122,11 @@ class EmployeeIntegrationTest {
     @Test
     void should_delete_employee_when_delete_request_given_delete_employee_request() throws Exception {
         //given
-        Employee employee = new Employee(1, "joseph", 22, "male", 1000000);
-        employeeRepository.save(employee);
+        Employee employee = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
 
         //when
         //then
-        mockMvc.perform(delete("/employees/1"))
+        mockMvc.perform(delete("/employees/" + employee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").doesNotExist())
                 .andExpect(jsonPath("$[0].name").doesNotExist())
