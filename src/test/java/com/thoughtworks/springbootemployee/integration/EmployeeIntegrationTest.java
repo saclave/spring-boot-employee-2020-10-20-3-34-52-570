@@ -80,4 +80,20 @@ class EmployeeIntegrationTest {
         Assertions.assertEquals(1, employees.size());
     }
 
+    @Test
+    void should_return_employee_when_get_specific_employee_given_get_employee_request() throws Exception {
+        //given
+        Employee employee = new Employee(1, "joseph", 22, "male", 1000000);
+        employeeRepository.save(employee);
+
+        //when
+        //then
+        mockMvc.perform(get("/employees/" + "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("joseph"))
+                .andExpect(jsonPath("$.age").value(22))
+                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.salary").value(1000000));
+    }
 }
