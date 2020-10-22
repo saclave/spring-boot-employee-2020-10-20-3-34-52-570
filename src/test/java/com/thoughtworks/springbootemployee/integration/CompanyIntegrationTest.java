@@ -96,4 +96,19 @@ class CompanyIntegrationTest {
         List<Company> companies = companyRepository.findAll();
         Assertions.assertEquals(1, companies.size());
     }
+
+    @Test
+    void should_return_company_when_get_specific_company_given_get_company_request() throws Exception {
+        //given
+        Employee employeeRequest = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
+
+        Company companyRequest = companyRepository.save(new Company(1, "LODS", Collections.singletonList(employeeRequest)));
+
+        //when
+        //then
+        mockMvc.perform(get("/companies/" + companyRequest.getCompanyId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.companyId").isNumber())
+                .andExpect(jsonPath("$.companyName").value("LODS"));
+    }
 }
