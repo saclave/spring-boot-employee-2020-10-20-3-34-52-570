@@ -3,17 +3,15 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
-import com.thoughtworks.springbootemployee.repository.CompanyRepositoryLegacy;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CompanyService {
-    private CompanyRepositoryLegacy companyRepositoryLegacy;
-    private EmployeeRepositoryLegacy employeeRepositoryLegacy;
     private EmployeeRepository employeeRepository;
     private CompanyRepository companyRepository;
 
@@ -32,38 +30,41 @@ public class CompanyService {
     }
 
     public Company updateCompany(Integer companyId, Company companyRequest) {
-        Company company = companyRepositoryLegacy.findByCompanyId(companyId);
-        if (companyRequest.getCompanyName() != null) {
-            company.setCompanyName(companyRequest.getCompanyName());
-        }
-        return company;
+        companyRequest.setCompanyId(companyId);
+        return companyRepository.save(companyRequest);
     }
 
     public Company getCompany(Integer companyId) {
-        return companyRepositoryLegacy.findByCompanyId(companyId);
+        return companyRepository.findById(companyId).orElse(null);
     }
 
     public void deleteCompany(Integer companyId) {
-        companyRepositoryLegacy.deleteCompany(companyId);
+        companyRepository.deleteById(companyId);
     }
 
-    public List<Company> getPaginationByCompany(long page, long pageSize) {
-        return companyRepositoryLegacy.findCompanyPagination(page, pageSize);
+    public List<Company> getPaginationByCompany(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return companyRepository.findAll(pageable).toList();
     }
 
     public List<Employee> getEmployeesByCompanyId(int companyId) {
-        return employeeRepositoryLegacy.findEmployeesByCompanyId(companyId);
-//        return employeeRepository
-//                .findById(companyId)
-//                .map(Company::getEmployeeList)
-//                .orElse(null);
+        return companyRepository.findById(companyId)
+                .map(Company::getEmployeeList)
+                .orElse(null);
     }
 
     public List<Company> getPaginatedEmployee(Long page, Long pageSize) {
-        return companyRepositoryLegacy.findCompanyPagination(page, pageSize);
+       // return companyRepositoryLegacy.findCompanyPagination(page, pageSize);
+        return null;
     }
 
     public void deleteCompanyEmployees(Integer companyId) {
-        companyRepositoryLegacy.deleteCompanyEmployeesByCompanyId(companyId);
+        List<Employee> employees = companyRepository.findById(companyId)
+                .map(Company::getEmployeeList)
+                .orElse(null);
+
+        if(employees != null) {
+            employees.stream().forEach(employee -> employeeRepository.deleteById(employee.getId()));
+        }
     }
 }

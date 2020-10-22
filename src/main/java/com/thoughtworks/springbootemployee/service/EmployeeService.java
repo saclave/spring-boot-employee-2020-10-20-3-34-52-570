@@ -2,7 +2,6 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,4 @@ public class EmployeeService {
         return employeeRepository.findAll(pageable).toList();
     }
 
-//    public List<Employee> getEmployeesByCompanyId(Integer companyId) {
-//        return employeeRepositoryLegacy.findEmployeesByCompanyId(companyId);
-//    }
 }
