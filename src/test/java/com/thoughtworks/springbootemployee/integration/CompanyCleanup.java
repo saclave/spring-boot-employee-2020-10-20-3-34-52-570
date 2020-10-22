@@ -1,9 +1,9 @@
 package com.thoughtworks.springbootemployee.integration;
 
-import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public class CompanyCleanup {
-    public static void tearDown(CompanyRepository companyRepository) {
+    public static void tearDown(JpaRepository companyRepository) {
         companyRepository.deleteAll();
     }
 

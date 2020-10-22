@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.integration;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,24 @@ class CompanyIntegrationTest {
     private CompanyRepository companyRepository;
 
     @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @AfterEach
     void tearDown() {
         CompanyCleanup.tearDown(companyRepository);
+        CompanyCleanup.tearDown(employeeRepository);
     }
 
     @Test
     void should_return_list_of_companies_when_get_all_companies_given_get_request() throws Exception {
         //given
-        Company companyRequest = new Company(1, "LODS", Collections.singletonList(new Employee()));
+        Employee employeeRequest = new Employee(1, "joseph", 22, "male", 1000000);
+        employeeRepository.save(employeeRequest);
+
+        Company companyRequest = new Company(1, "LODS", Collections.singletonList(employeeRequest));
         companyRepository.save(companyRequest);
 
         //when
