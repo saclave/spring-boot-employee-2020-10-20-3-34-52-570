@@ -6,6 +6,8 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
@@ -117,8 +119,12 @@ public class CompanyServiceTest {
 //        Pageable pageable = PageRequest.of(2, 3);
 //
 //        //when
-//        when(companyRepository.findAll()).thenReturn(asList(company1, company2, company3));
-//        when(companyRepository.findAll(pageable).toList()).thenReturn(asList(company2, company3));
+//        when(companyRepository.save(company1)).thenReturn(company1);
+//        when(companyRepository.save(company2)).thenReturn(company2);
+//        when(companyRepository.save(company3)).thenReturn(company3);
+//
+//        //when(companyRepository.findAll()).thenReturn(asList(company1, company2, company3));
+//        //when(companyRepository.findAll()).thenReturn(asList(company2, company3));
 //
 //        List<Company> actual = companyService.getPaginationByCompany(2, 3);
 //        assertEquals(2, actual.size());
