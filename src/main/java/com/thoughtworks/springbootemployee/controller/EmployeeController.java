@@ -48,7 +48,7 @@ public class EmployeeController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public List<Employee> pagination(@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize) {
+    public List<Employee> pagination(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
         return employeeService.getPaginatedEmployee(page, pageSize);
     }
 }
