@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +33,7 @@ class EmployeeIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        employeeRepository.deleteAll();
+        EmployeeCleanup.tearDown(employeeRepository);
     }
 
     @Test
@@ -88,7 +87,7 @@ class EmployeeIntegrationTest {
 
         //when
         //then
-        mockMvc.perform(get("/employees/" + "1"))
+        mockMvc.perform(get("/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("joseph"))
@@ -96,4 +95,30 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.gender").value("male"))
                 .andExpect(jsonPath("$.salary").value(1000000));
     }
+
+    @Test
+    void should_update_employee_when_put_specific_employee_given_put_employee_request_and_details() throws Exception {
+        //given
+        Employee employee = new Employee(1, "joseph", 22, "male", 1000000);
+        employeeRepository.save(employee);
+        String updatedEmployeeAsJson = "{\n" +
+                "  \"name\": \"maria\",\n" +
+                "  \"age\": 19,\n" +
+                "  \"gender\": \"female\",\n" +
+                "  \"salary\": 200000\n" +
+                "}";
+
+        //when
+        //then
+        mockMvc.perform(put("/employees/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedEmployeeAsJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("maria"))
+                .andExpect(jsonPath("$.age").value(19))
+                .andExpect(jsonPath("$.gender").value("female"))
+                .andExpect(jsonPath("$.salary").value(200000));
+    }
+
 }
