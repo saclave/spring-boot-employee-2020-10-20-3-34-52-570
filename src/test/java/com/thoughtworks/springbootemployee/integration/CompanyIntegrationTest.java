@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -110,5 +111,33 @@ class CompanyIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.companyId").isNumber())
                 .andExpect(jsonPath("$.companyName").value("LODS"));
+    }
+
+    @Test
+    void should_return_specific_employees_when_get_employees_under_company_given_get_company_employee_request() throws Exception {
+        //given
+        Employee employeeRequestOne = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
+        Employee employeeRequestTwo = employeeRepository.save(new Employee(2, "maria", 18, "female", 20000));
+        Employee employeeRequestDiff = employeeRepository.save(new Employee(3, "jerick", 27, "male", 500));
+
+        Company companyRequest = companyRepository.save(new Company(1, "LODS", Arrays.asList(employeeRequestOne, employeeRequestTwo)));
+
+        //when
+        //then
+        mockMvc.perform(get("/companies/" + companyRequest.getCompanyId() + "/employeeList"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].name").value("joseph"))
+                .andExpect(jsonPath("$[0].age").value(22))
+                .andExpect(jsonPath("$[0].gender").value("male"))
+                .andExpect(jsonPath("$[0].salary").value(1000000))
+                .andExpect(jsonPath("$[1].id").isNumber())
+                .andExpect(jsonPath("$[1].name").value("maria"))
+                .andExpect(jsonPath("$[1].age").value(18))
+                .andExpect(jsonPath("$[1].gender").value("female"))
+                .andExpect(jsonPath("$[1].salary").value(20000))
+                .andExpect(jsonPath("$[2].id").doesNotExist());
+        List<Employee> employees = employeeRepository.findAll();
+        Assertions.assertEquals(3, employees.size());
     }
 }
