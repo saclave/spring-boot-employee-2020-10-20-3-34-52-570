@@ -175,4 +175,35 @@ class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[0].companyName").doesNotExist());
     }
 
+    @Test
+    void should_return_page_1_and_2_for_companies_when_pagination_given_page_size_1_page_size_2() throws Exception {
+        //given
+        Employee maleEmployeeOne = new Employee(1, "joseph", 22, "male", 1000000);
+        Employee femaleEmployeeOne = new Employee(2, "maria", 19, "female", 200000);
+        Employee maleEmployeeTwo = new Employee(3, "jerick", 25, "male", 500);
+        employeeRepository.save(maleEmployeeOne);
+        employeeRepository.save(femaleEmployeeOne);
+        employeeRepository.save(maleEmployeeTwo);
+
+        Company companyOne = new Company(1, "LODS", Collections.singletonList(maleEmployeeOne));
+        Company companyTwo = new Company(2, "ITS", Collections.singletonList(femaleEmployeeOne));
+        Company companyThree = new Company(3, "ADDS", Collections.singletonList(maleEmployeeTwo));
+        companyRepository.save(companyOne);
+        companyRepository.save(companyTwo);
+        companyRepository.save(companyThree);
+
+        // when
+        // then
+        mockMvc.perform(get("/companies?page=0&pageSize=2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].companyId").isNumber())
+                .andExpect(jsonPath("$[0].companyName").value("LODS"))
+                .andExpect(jsonPath("$[1].companyId").isNumber())
+                .andExpect(jsonPath("$[1].companyName").value("ITS"))
+                .andExpect(jsonPath("$[2].id").doesNotExist());
+
+        List<Company> companies = companyRepository.findAll();
+        Assertions.assertEquals(3, companies.size());
+    }
+
 }
