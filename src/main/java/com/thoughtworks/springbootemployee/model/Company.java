@@ -1,9 +1,19 @@
 package com.thoughtworks.springbootemployee.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Company {
+    @Id
     private Integer companyId;
+    private String companyName;
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "companyId")
+    private List<Employee> employeeList;
 
     public Company(Integer companyId, String companyName, List<Employee> employeeList) {
         this.companyId = companyId;
@@ -13,9 +23,6 @@ public class Company {
 
     public Company() {
     }
-
-    private String companyName;
-    private List<Employee> employeeList;
 
     public String getCompanyName() {
         return companyName;

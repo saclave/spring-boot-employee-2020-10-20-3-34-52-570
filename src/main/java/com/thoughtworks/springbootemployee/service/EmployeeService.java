@@ -1,29 +1,29 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class EmployeeService {
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryLegacy employeeRepositoryLegacy;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeService(EmployeeRepositoryLegacy employeeRepositoryLegacy) {
+        this.employeeRepositoryLegacy = employeeRepositoryLegacy;
     }
 
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAllEmployees();
+        return employeeRepositoryLegacy.findAllEmployees();
     }
 
     public Employee create(Employee employeeRequest) {
-        return employeeRepository.saveEmployee(employeeRequest);
+        return employeeRepositoryLegacy.saveEmployee(employeeRequest);
     }
 
     public Employee update(Integer employeeId, Employee employeeUpdate) {
-        Employee employee = employeeRepository.findEmployeeById(employeeId);
+        Employee employee = employeeRepositoryLegacy.findEmployeeById(employeeId);
         if (employeeUpdate.getName() != null) {
             employee.setName(employeeUpdate.getName());
         }
@@ -40,22 +40,22 @@ public class EmployeeService {
     }
 
     public Employee getEmployee(Integer employeeId) {
-        return employeeRepository.findEmployeeById(employeeId);
+        return employeeRepositoryLegacy.findEmployeeById(employeeId);
     }
 
     public void deleteEmployee(int employeeId) {
-        employeeRepository.deleteEmployee(employeeId);
+        employeeRepositoryLegacy.deleteEmployee(employeeId);
     }
 
     public List<Employee> getEmployeesByGender(String gender) {
-        return employeeRepository.findEmployeesByGender(gender);
+        return employeeRepositoryLegacy.findEmployeesByGender(gender);
     }
 
     public List<Employee> getPaginatedEmployee(Long page, Long pageSize) {
-        return employeeRepository.findEmployeesByPagination(page, pageSize);
+        return employeeRepositoryLegacy.findEmployeesByPagination(page, pageSize);
     }
 
     public List<Employee> getEmployeesByCompanyId(Integer companyId) {
-        return employeeRepository.findEmployeesByCompanyId(companyId);
+        return employeeRepositoryLegacy.findEmployeesByCompanyId(companyId);
     }
 }

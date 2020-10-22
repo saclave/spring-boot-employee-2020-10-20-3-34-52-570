@@ -2,8 +2,8 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.repository.CompanyRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.CompanyRepositoryLegacy;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,15 +17,15 @@ import static org.mockito.Mockito.*;
 
 public class CompanyServiceTest {
 
-    private CompanyRepository companyRepository;
+    private CompanyRepositoryLegacy companyRepositoryLegacy;
     private CompanyService companyService;
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryLegacy employeeRepositoryLegacy;
 
     @BeforeEach
     void setUp() {
-        companyRepository = mock(CompanyRepository.class);
-        employeeRepository = mock(EmployeeRepository.class);
-        companyService = new CompanyService(companyRepository, employeeRepository);
+        companyRepositoryLegacy = mock(CompanyRepositoryLegacy.class);
+        employeeRepositoryLegacy = mock(EmployeeRepositoryLegacy.class);
+        companyService = new CompanyService(companyRepositoryLegacy, employeeRepositoryLegacy);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class CompanyServiceTest {
         //given
 
         //when
-        when(companyRepository.findAllCompanies()).thenReturn(Collections.singletonList(new Company()));
+        when(companyRepositoryLegacy.findAllCompanies()).thenReturn(Collections.singletonList(new Company()));
         List<Company> actual = companyService.getAllCompanies();
 
         //then
@@ -45,7 +45,7 @@ public class CompanyServiceTest {
         //given
         //when
         Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
-        when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
+        when(companyRepositoryLegacy.saveCompany(companyRequest)).thenReturn(companyRequest);
         Company actual = companyService.create(companyRequest);
 
         //then
@@ -58,7 +58,7 @@ public class CompanyServiceTest {
         Employee employee = new Employee();
         Company companyUpdate = new Company(69, "MIS", Collections.singletonList(employee));
         //when
-        when(companyRepository.findByCompanyId(companyUpdate.getCompanyId())).thenReturn(companyUpdate);
+        when(companyRepositoryLegacy.findByCompanyId(companyUpdate.getCompanyId())).thenReturn(companyUpdate);
         Company actual = companyService.updateCompany(companyUpdate.getCompanyId(), companyUpdate);
 
         //then
@@ -74,7 +74,7 @@ public class CompanyServiceTest {
         Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
 
         //when
-        when(companyRepository.findByCompanyId(companyRequest.getCompanyId())).thenReturn(companyRequest);
+        when(companyRepositoryLegacy.findByCompanyId(companyRequest.getCompanyId())).thenReturn(companyRequest);
         Company actual = companyService.getCompany(companyRequest.getCompanyId());
 
         //then
@@ -90,7 +90,7 @@ public class CompanyServiceTest {
         companyService.deleteCompany(companyRequest.getCompanyId());
 
         //then
-        verify(companyRepository, times(1)).deleteCompany(69);
+        verify(companyRepositoryLegacy, times(1)).deleteCompany(69);
     }
 
 
@@ -104,7 +104,7 @@ public class CompanyServiceTest {
         Company companyRequest = new Company(69, "LODS", asList(firstEmployee, secondEmployee));
 
         //when
-        when(employeeRepository.findEmployeesByCompanyId(companyRequest.getCompanyId())).thenReturn(asList(firstEmployee, secondEmployee));
+        when(employeeRepositoryLegacy.findEmployeesByCompanyId(companyRequest.getCompanyId())).thenReturn(asList(firstEmployee, secondEmployee));
         List<Employee> actual = companyService.getEmployeesByCompanyId(69);
         //then
         assertSame(2, actual.size());
@@ -118,8 +118,8 @@ public class CompanyServiceTest {
         Company company3 = new Company(69, "MIS", Collections.singletonList(new Employee()));
 
         //when
-        when(companyRepository.findAllCompanies()).thenReturn(asList(company1, company2, company3));
-        when(companyRepository.findCompanyPagination(2L, 3L)).thenReturn(asList(company2, company3));
+        when(companyRepositoryLegacy.findAllCompanies()).thenReturn(asList(company1, company2, company3));
+        when(companyRepositoryLegacy.findCompanyPagination(2L, 3L)).thenReturn(asList(company2, company3));
 
         List<Company> actual = companyService.getPaginationByCompany(2L, 3L);
         assertEquals(2, actual.size());

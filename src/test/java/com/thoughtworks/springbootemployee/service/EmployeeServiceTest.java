@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryLegacy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,13 +15,13 @@ import static org.mockito.Mockito.*;
 
 class EmployeeServiceTest {
 
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryLegacy employeeRepositoryLegacy;
     private EmployeeService employeeService;
 
     @BeforeEach
     void setUp() {
-        employeeRepository = mock(EmployeeRepository.class);
-        employeeService = new EmployeeService(employeeRepository);
+        employeeRepositoryLegacy = mock(EmployeeRepositoryLegacy.class);
+        employeeService = new EmployeeService(employeeRepositoryLegacy);
     }
 
     @Test
@@ -29,7 +29,7 @@ class EmployeeServiceTest {
         //given
 
         //when
-        when(employeeRepository.findAllEmployees()).thenReturn(Collections.singletonList(new Employee()));
+        when(employeeRepositoryLegacy.findAllEmployees()).thenReturn(Collections.singletonList(new Employee()));
         List<Employee> actual = employeeService.getAllEmployees();
 
         //then
@@ -41,7 +41,7 @@ class EmployeeServiceTest {
         //given
         //when
         Employee employeeRequest = new Employee(1, "Dlo", 23, "Male", 37000000);
-        when(employeeRepository.saveEmployee(employeeRequest)).thenReturn(employeeRequest);
+        when(employeeRepositoryLegacy.saveEmployee(employeeRequest)).thenReturn(employeeRequest);
         Employee actual = employeeService.create(employeeRequest);
 
         //then
@@ -55,9 +55,9 @@ class EmployeeServiceTest {
         Employee employeeUpdate = new Employee(1, "Vea", 23, "Female", 25000);
 
         //when
-        when(employeeRepository.findAllEmployees()).thenReturn(Collections.singletonList(employee));
-        when(employeeRepository.updateEmployee(employeeUpdate)).thenReturn(employeeUpdate);
-        when(employeeRepository.findEmployeeById(employeeUpdate.getId())).thenReturn(employeeUpdate);
+        when(employeeRepositoryLegacy.findAllEmployees()).thenReturn(Collections.singletonList(employee));
+        when(employeeRepositoryLegacy.updateEmployee(employeeUpdate)).thenReturn(employeeUpdate);
+        when(employeeRepositoryLegacy.findEmployeeById(employeeUpdate.getId())).thenReturn(employeeUpdate);
         Employee actual = employeeService.update(employeeUpdate.getId(), employeeUpdate);
 
         //then
@@ -75,8 +75,8 @@ class EmployeeServiceTest {
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
 
         //when
-        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
-        when(employeeRepository.findEmployeeById(firstEmployee.getId())).thenReturn(firstEmployee);
+        when(employeeRepositoryLegacy.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
+        when(employeeRepositoryLegacy.findEmployeeById(firstEmployee.getId())).thenReturn(firstEmployee);
         Employee actual = employeeService.getEmployee(firstEmployee.getId());
 
         //then
@@ -92,7 +92,7 @@ class EmployeeServiceTest {
         employeeService.deleteEmployee(employee.getId());
 
         //then
-        verify(employeeRepository, times(1)).deleteEmployee(1);
+        verify(employeeRepositoryLegacy, times(1)).deleteEmployee(1);
     }
 
     @Test
@@ -102,8 +102,8 @@ class EmployeeServiceTest {
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
 
         //when
-        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
-        when(employeeRepository.findEmployeesByGender("Male")).thenReturn(Collections.singletonList(secondEmployee));
+        when(employeeRepositoryLegacy.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee));
+        when(employeeRepositoryLegacy.findEmployeesByGender("Male")).thenReturn(Collections.singletonList(secondEmployee));
         List<Employee> actual = employeeService.getEmployeesByGender("Male");
 
         //then
@@ -118,8 +118,8 @@ class EmployeeServiceTest {
         Employee thirdEmployee = new Employee(3, "Dlo", 23, "Male", 37000000);
 
         //when
-        when(employeeRepository.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee, thirdEmployee));
-        when(employeeRepository.findEmployeesByPagination(2L, 3L)).thenReturn(asList(secondEmployee, thirdEmployee));
+        when(employeeRepositoryLegacy.findAllEmployees()).thenReturn(asList(firstEmployee, secondEmployee, thirdEmployee));
+        when(employeeRepositoryLegacy.findEmployeesByPagination(2L, 3L)).thenReturn(asList(secondEmployee, thirdEmployee));
 
         List<Employee> actual = employeeService.getPaginatedEmployee(2L, 3L);
         assertEquals(2, actual.size());
