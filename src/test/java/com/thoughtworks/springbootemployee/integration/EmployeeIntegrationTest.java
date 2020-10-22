@@ -59,26 +59,25 @@ class EmployeeIntegrationTest {
         // given
         String employeeAsJson = "{\n" +
                 "  \"name\": \"joseph\",\n" +
-                "  \"age\": \"22\",\n" +
+                "  \"age\": 22,\n" +
                 "  \"gender\": \"male\",\n" +
-                "  \"salary\": 1000000";
-        String targetEmployeeId = "123";
-
-        //HashMap<String, Integer> mapper = new
+                "  \"salary\": 1000000\n" +
+                "}";
 
         // when
         // then
-        mockMvc.perform(post("/employees/", targetEmployeeId)
+        mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(employeeAsJson))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$[0].id").isNumber())
-                .andExpect(jsonPath("$[0].name").value("joseph"))
-                .andExpect(jsonPath("$[0].age").value(22))
-                .andExpect(jsonPath("$[0].gender").value("male"))
-                .andExpect(jsonPath("$[0].salary").value(1000000));
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("joseph"))
+                .andExpect(jsonPath("$.age").value(22))
+                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.salary").value(1000000));
 
         List<Employee> employees = employeeRepository.findAll();
         Assertions.assertEquals(1, employees.size());
     }
+
 }
