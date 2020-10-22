@@ -6,8 +6,8 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class CompanyServiceTest {
+class CompanyServiceTest {
 
     private CompanyRepository companyRepository;
     private EmployeeRepository employeeRepository;
@@ -110,25 +110,22 @@ public class CompanyServiceTest {
         assertSame(2, actual.size());
     }
 
-//    @Test
-//    void should_return_page_1_and_2_for_companies_when_pagination_given_page_size_1_page_size_2() {
-//        //given
-//        Company company1 = new Company(69, "LODS", Collections.singletonList(new Employee()));
-//        Company company2 = new Company(69, "MIS", Collections.singletonList(new Employee()));
-//        Company company3 = new Company(69, "MIS", Collections.singletonList(new Employee()));
-//        Pageable pageable = PageRequest.of(2, 3);
-//
-//        //when
-//        when(companyRepository.save(company1)).thenReturn(company1);
-//        when(companyRepository.save(company2)).thenReturn(company2);
-//        when(companyRepository.save(company3)).thenReturn(company3);
-//
-//        //when(companyRepository.findAll()).thenReturn(asList(company1, company2, company3));
-//        //when(companyRepository.findAll()).thenReturn(asList(company2, company3));
-//
-//        List<Company> actual = companyService.getPaginationByCompany(2, 3);
-//        assertEquals(2, actual.size());
-//    }
+    @Test
+    void should_return_page_1_and_2_for_companies_when_pagination_given_page_size_1_page_size_2() {
+        //given
+        Company company1 = new Company(69, "LODS", Collections.singletonList(new Employee()));
+        Company company2 = new Company(69, "MIS", Collections.singletonList(new Employee()));
+        Company company3 = new Company(69, "MIS", Collections.singletonList(new Employee()));
+        Page<Company> companyPage = mock(Page.class);
+        //when
+        when(companyRepository.save(company1)).thenReturn(company1);
+        when(companyRepository.save(company2)).thenReturn(company2);
+        when(companyRepository.save(company3)).thenReturn(company3);
+        when(companyRepository.findAll(PageRequest.of(2, 3))).thenReturn(companyPage);
+        when(companyPage.toList()).thenReturn(asList(company2, company3));
+        List<Company> actual = companyService.getPaginationByCompany(2, 3);
+        assertEquals(2, actual.size());
+    }
 }
 
 
