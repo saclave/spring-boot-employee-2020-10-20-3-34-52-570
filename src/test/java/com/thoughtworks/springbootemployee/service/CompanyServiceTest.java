@@ -55,12 +55,9 @@ public class CompanyServiceTest {
     @Test
     void should_return_updated_company_info_when_given_an_update_request() {
         //given
-        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
         Employee employee = new Employee();
         Company companyUpdate = new Company(69, "MIS", Collections.singletonList(employee));
         //when
-        when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
-        when(companyRepository.updateCompany(companyUpdate)).thenReturn(companyUpdate);
         when(companyRepository.findByCompanyId(companyUpdate.getCompanyId())).thenReturn(companyUpdate);
         Company actual = companyService.updateCompany(companyUpdate.getCompanyId(), companyUpdate);
 
@@ -75,11 +72,8 @@ public class CompanyServiceTest {
     void should_return_company_when_get_given_a_company_id() {
         //given
         Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
-        Company companyUpdate = new Company(69, "MIS", Collections.singletonList(new Employee()));
 
         //when
-        when(companyRepository.saveCompany(companyRequest)).thenReturn(companyRequest);
-        when(companyRepository.saveCompany(companyUpdate)).thenReturn(companyUpdate);
         when(companyRepository.findByCompanyId(companyRequest.getCompanyId())).thenReturn(companyRequest);
         Company actual = companyService.getCompany(companyRequest.getCompanyId());
 
