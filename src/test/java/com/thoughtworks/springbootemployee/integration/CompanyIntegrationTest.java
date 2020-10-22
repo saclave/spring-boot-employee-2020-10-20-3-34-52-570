@@ -55,42 +55,6 @@ class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[0].companyName").value("LODS"));
     }
 
-//    @Test
-//    void should_create_company_when_create_given_company_request() throws Exception {
-//        // given
-//        Employee employee = new Employee(2, "oblaks", 21, "male", 25000);
-//        employeeRepository.save(employee);
-//
-//        String employeeAsJson = "{\n" +
-//                "    \"companyId\": 1,\n" +
-//                "    \"companyName\": \"oblaks\",\n" +
-//                "    \"employeeList\": [\n" +
-//                "        {\n" +
-//                "            \"id\": " + employee.getId() + ",\n" +
-//                "            \"companyId\": null,\n" +
-//                "            \"name\": \"oblaks\",\n" +
-//                "            \"age\": 21,\n" +
-//                "            \"gender\": \"male\",\n" +
-//                "            \"salary\": 25000\n" +
-//                "        }\n" +
-//                "    ],\n" +
-//                "    \"numOfEmployees\": 1\n" +
-//                "}";
-//
-//        // when
-//        // then
-//        mockMvc.perform(post("/companies")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(employeeAsJson))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.companyId").isNumber())
-//                .andExpect(jsonPath("$.companyName").value("oblaks"))
-//                .andExpect(jsonPath("$.numOfEmployees").value(1));
-//
-//        List<Company> companies = companyRepository.findAll();
-//        Assertions.assertEquals(1, companies.size());
-//    }
-
     @Test
     void should_return_company_when_get_specific_company_given_get_company_request() throws Exception {
         //given
@@ -133,26 +97,6 @@ class CompanyIntegrationTest {
         List<Employee> employees = employeeRepository.findAll();
         Assertions.assertEquals(3, employees.size());
     }
-
-//    @Test
-//    void should_update_company_when_put_specific_company_given_put_company_request_and_details() throws Exception {
-//        //given
-//        Employee employeeRequest = employeeRepository.save(new Employee(1, "joseph", 22, "male", 1000000));
-//
-//        Company companyRequest = companyRepository.save(new Company(1, "LODS", Collections.singletonList(employeeRequest)));
-//        String updatedCompanyAsJson = "{\n" +
-//                "  \"companyName\": \"maria\"\n" +
-//                "}";
-//
-//        //when
-//        //then
-//        mockMvc.perform(put("/companies/" + companyRequest.getCompanyId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(updatedCompanyAsJson))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].companyId").isNumber())
-//                .andExpect(jsonPath("$[0].companyName").value("LODS"));
-//    }
 
     @Test
     void should_delete_company_when_delete_request_given_delete_company_request() throws Exception {
