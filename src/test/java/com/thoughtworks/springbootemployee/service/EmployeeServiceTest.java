@@ -56,8 +56,9 @@ class EmployeeServiceTest {
         Employee employeeUpdate = new Employee(1, "Vea", 23, "Female", 25000);
 
         //when
+        when(employeeRepository.findById(anyInt())).thenReturn(java.util.Optional.of(employeeUpdate));
         when(employeeRepository.save(employeeUpdate)).thenReturn(employeeUpdate);
-        Employee actual = employeeService.update(employeeUpdate.getCompanyId(), employeeUpdate);
+        Employee actual = employeeService.update(employeeUpdate.getId(), employeeUpdate);
 
         //then
         assertEquals("Vea", actual.getName());

@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.EmployeeNotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.data.domain.PageRequest;
@@ -7,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.thoughtworks.springbootemployee.exception.EmployeeNotFoundException.EMPLOYEE_NOT_FOUND;
 
 @Service
 public class EmployeeService {
@@ -25,12 +28,27 @@ public class EmployeeService {
     }
 
     public Employee update(Integer employeeId, Employee employeeUpdate) {
-        employeeUpdate.setId(employeeId);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new EmployeeNotFoundException(EMPLOYEE_NOT_FOUND));
+
+        if (employeeUpdate.getName() != null) {
+            employee.setName(employeeUpdate.getName());
+        }
+        if (employeeUpdate.getAge() != null) {
+            employee.setAge(employeeUpdate.getAge());
+        }
+        if (employeeUpdate.getGender() != null) {
+            employee.setGender(employeeUpdate.getGender());
+        }
+        if (employeeUpdate.getSalary() != null) {
+            employee.setSalary(employeeUpdate.getSalary());
+        }
+
         return employeeRepository.save(employeeUpdate);
     }
 
     public Employee getEmployee(Integer employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null);
+        return employeeRepository.findById(employeeId).orElseThrow(() -> new EmployeeNotFoundException(EMPLOYEE_NOT_FOUND));
     }
 
     public void deleteEmployee(int employeeId) {

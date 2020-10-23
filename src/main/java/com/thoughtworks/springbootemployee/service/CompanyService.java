@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundException.COMPANY_NOT_FOUND;
 
 @Service
 public class CompanyService {
@@ -35,7 +38,7 @@ public class CompanyService {
     }
 
     public Company getCompany(Integer companyId) {
-        return companyRepository.findById(companyId).orElse(null);
+        return companyRepository.findById(companyId).orElseThrow(()-> new CompanyNotFoundException(COMPANY_NOT_FOUND));
     }
 
     public void deleteCompany(Integer companyId) {
@@ -50,13 +53,13 @@ public class CompanyService {
     public List<Employee> getEmployeesByCompanyId(int companyId) {
         return companyRepository.findById(companyId)
                 .map(Company::getEmployeeList)
-                .orElse(null);
+                .orElseThrow(()-> new CompanyNotFoundException(COMPANY_NOT_FOUND));
     }
 
     public void deleteCompanyEmployees(Integer companyId) {
         List<Employee> employees = companyRepository.findById(companyId)
                 .map(Company::getEmployeeList)
-                .orElse(null);
+                .orElseThrow(()-> new CompanyNotFoundException(COMPANY_NOT_FOUND));
 
         if(employees != null) {
             employees.stream().forEach(employee -> employeeRepository.deleteById(employee.getId()));
