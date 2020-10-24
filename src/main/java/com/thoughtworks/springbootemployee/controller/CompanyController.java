@@ -60,7 +60,7 @@ public class CompanyController {
         return employeeMapper.toResponseList(companyService.getEmployeesByCompanyId(companyId));
     }
 
-    @DeleteMapping("/{companyId}/")
+    @DeleteMapping("/{companyId}")
     public void deleteCompany(@PathVariable Integer companyId) {
         companyService.deleteCompany(companyId);
     }
