@@ -1,6 +1,6 @@
 create table company (
      id bigint not null primary key auto_increment,
-     name varchar(30) not null
+     company_name varchar(30) not null
 );
 
 create table employee (

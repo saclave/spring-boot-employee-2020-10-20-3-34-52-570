@@ -7,11 +7,12 @@ import java.util.List;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer companyId;
+    private Integer id;
     private String companyName;
     @OneToMany(
             fetch = FetchType.EAGER,
-            orphanRemoval = true
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST
     )
     @JoinColumn(name = "companyId")
     private List<Employee> employeeList;
@@ -36,12 +37,12 @@ public class Company {
         return employeeList.size();
     }
 
-    public Integer getCompanyId() {
-        return companyId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public List<Employee> getEmployeeList() {

@@ -1,10 +1,9 @@
 package com.thoughtworks.springbootemployee.model;
 
-import javax.persistence.*;
 import java.util.List;
 
 public class CompanyResponse {
-    private Integer companyId;
+    private Integer id;
     private String companyName;
     private List<Employee> employeeList;
 
@@ -28,12 +27,12 @@ public class CompanyResponse {
         return employeeList.size();
     }
 
-    public Integer getCompanyId() {
-        return companyId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public List<Employee> getEmployeeList() {

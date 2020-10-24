@@ -57,16 +57,16 @@ class CompanyServiceTest {
     void should_return_updated_company_info_when_given_an_update_request() {
         //given
         Company company = new Company("OOCL", null);
-        company.setCompanyId(1);
+        company.setId(1);
         Company expectedCompany = new Company("LODS", null);
-        expectedCompany.setCompanyId(1);
+        expectedCompany.setId(1);
         CompanyRepository companyRepository = mock(CompanyRepository.class);
         when(companyRepository.findById(1)).thenReturn(Optional.of(company));
         when(companyRepository.save(company)).thenReturn(expectedCompany);
         CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
-        Company updatedCompany = companyService.updateCompany(company.getCompanyId(), expectedCompany);
+        Company updatedCompany = companyService.updateCompany(company.getId(), expectedCompany);
 
         //then
         assertSame(expectedCompany, updatedCompany);
@@ -78,8 +78,8 @@ class CompanyServiceTest {
         Company companyRequest = new Company("LODS", Collections.singletonList(new Employee()));
 
         //when
-        when(companyRepository.findById(companyRequest.getCompanyId())).thenReturn(java.util.Optional.of(companyRequest));
-        Company actual = companyService.getCompany(companyRequest.getCompanyId());
+        when(companyRepository.findById(companyRequest.getId())).thenReturn(java.util.Optional.of(companyRequest));
+        Company actual = companyService.getCompany(companyRequest.getId());
 
         //then
         assertSame(companyRequest, actual);
@@ -89,10 +89,10 @@ class CompanyServiceTest {
     void should_remove_employee_when_delete_given_employee_id() {
         //given
         Company companyRequest = new Company("LODS", Collections.singletonList(new Employee()));
-        companyRequest.setCompanyId(69);
+        companyRequest.setId(69);
 
         //when
-        companyService.deleteCompany(companyRequest.getCompanyId());
+        companyService.deleteCompany(companyRequest.getId());
 
         //then
         verify(companyRepository, times(1)).deleteById(69);
@@ -105,10 +105,10 @@ class CompanyServiceTest {
         Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
         Company companyRequest = new Company("LODS", asList(firstEmployee, secondEmployee));
-        companyRequest.setCompanyId(69);
+        companyRequest.setId(69);
 
         //when
-        when(companyRepository.findById(companyRequest.getCompanyId())).thenReturn(Optional.of(companyRequest));
+        when(companyRepository.findById(companyRequest.getId())).thenReturn(Optional.of(companyRequest));
         List<Employee> actual = companyService.getEmployeesByCompanyId(69);
         //then
         assertSame(2, actual.size());
