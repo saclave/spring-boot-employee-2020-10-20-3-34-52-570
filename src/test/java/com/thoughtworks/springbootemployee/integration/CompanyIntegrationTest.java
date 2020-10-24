@@ -118,7 +118,7 @@ class CompanyIntegrationTest {
         companyRepository.save(company3);
 
        //then
-        mockMvc.perform(get("/companies?page=1&pageSize=2"))
+        mockMvc.perform(get("/companies?page=0&pageSize=2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].companyName").value("LODS"))
@@ -142,7 +142,7 @@ class CompanyIntegrationTest {
                 .content(companyUpdateJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.companyName").value("SME"))
+                .andExpect(jsonPath("$.companyName").value("LODS"))
                 .andExpect(jsonPath("$.employeeList").isEmpty());
     }
 
