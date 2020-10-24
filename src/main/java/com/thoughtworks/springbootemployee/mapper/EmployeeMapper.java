@@ -1,34 +1,31 @@
 package com.thoughtworks.springbootemployee.mapper;
 
 import com.thoughtworks.springbootemployee.model.*;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
 public class EmployeeMapper {
 
-    private Employee employee;
-
-    public EmployeeResponse toResponse(Employee employee){
-        EmployeeResponse response = new EmployeeResponse();
-
-        response.setId(employee.getId());
-        response.setAge(employee.getAge());
-        response.setGender(employee.getGender());
-        response.setCompanyId(employee.getCompanyId());
-        response.setName(employee.getName());
-        response.setSalary(employee.getSalary());
-
-        return response;
+    public Employee toEntity(EmployeeRequest employeeRequest) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeRequest, employee);
+        return employee;
     }
 
-    public Employee toEntity(EmployeeRequest request){
-        if(request == null) {
-           employee = new Employee();
-        }
-        employee.setAge(request.getAge());
-        employee.setGender(request.getGender());
-        employee.setName(request.getName());
-        employee.setSalary(request.getSalary());
+    public EmployeeResponse toResponse(Employee employee) {
+        EmployeeResponse employeeResponse = new EmployeeResponse();
+        BeanUtils.copyProperties(employee, employeeResponse);
+        return employeeResponse;
+    }
 
-        return  employee;
+    public List<EmployeeResponse> toResponseList(List<Employee> employees) {
+        return employees.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
 }

@@ -3,29 +3,33 @@ package com.thoughtworks.springbootemployee.mapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.CompanyRequest;
 import com.thoughtworks.springbootemployee.model.CompanyResponse;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
 public class CompanyMapper {
 
     private Company company;
 
-    public CompanyResponse toResponse(Company company){
-        CompanyResponse response = new CompanyResponse();
-
-        response.setNumOfEmployees(company.getNumOfEmployees());
-        response.setCompanyId(company.getCompanyId());
-        response.setCompanyName(company.getCompanyName());
-        response.setEmployeeList(company.getEmployeeList());
-
-        return response;
+    public Company toEntity(CompanyRequest companyRequest) {
+        Company company = new Company();
+        BeanUtils.copyProperties(companyRequest, company);
+        return company;
     }
 
-    public Company toEntity(CompanyRequest request){
-        if(request == null) {
-           company = new Company();
-        }
-        company.setCompanyName(request.getCompanyName());
+    public CompanyResponse toResponse(Company company) {
+        CompanyResponse companyResponse = new CompanyResponse();
+        BeanUtils.copyProperties(company, companyResponse);
+        return companyResponse;
+    }
 
-        return  company;
+    public List<CompanyResponse> toResponseList(List<Company> companies) {
+        return companies.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
 }
