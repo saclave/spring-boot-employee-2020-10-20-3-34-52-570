@@ -43,8 +43,7 @@ public class EmployeeService {
         if (employeeUpdate.getSalary() != null) {
             employee.setSalary(employeeUpdate.getSalary());
         }
-
-        return employeeRepository.save(employeeUpdate);
+        return employeeRepository.save(employee);
     }
 
     public Employee getEmployee(Integer employeeId) {
