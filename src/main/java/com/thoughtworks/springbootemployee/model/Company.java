@@ -16,13 +16,12 @@ public class Company {
     @JoinColumn(name = "companyId")
     private List<Employee> employeeList;
 
-    public Company(Integer companyId, String companyName, List<Employee> employeeList) {
-        this.companyId = companyId;
-        this.companyName = companyName;
-        this.employeeList = employeeList;
+    public Company() {
     }
 
-    public Company() {
+    public Company(String companyName, List<Employee> employeeList) {
+        this.companyName = companyName;
+        this.employeeList = employeeList;
     }
 
     public String getCompanyName() {

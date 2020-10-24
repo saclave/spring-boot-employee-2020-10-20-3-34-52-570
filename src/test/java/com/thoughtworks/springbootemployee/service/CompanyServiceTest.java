@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertSame;
@@ -44,34 +45,37 @@ class CompanyServiceTest {
     void should_return_created_company_when_given_a_company_request() {
         //given
         //when
-        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
+        Company companyRequest = new Company("LODS", Collections.singletonList(new Employee()));
         when(companyRepository.save(companyRequest)).thenReturn(companyRequest);
         Company actual = companyService.create(companyRequest);
 
         //then
-        assertEquals(69, actual.getCompanyId());
+        assertEquals("LODS", actual.getCompanyName());
     }
 
     @Test
     void should_return_updated_company_info_when_given_an_update_request() {
         //given
-        Employee employee = new Employee();
-        Company companyUpdate = new Company(69, "MIS", Collections.singletonList(employee));
+        Company company = new Company("OOCL", null);
+        company.setCompanyId(1);
+        Company expectedCompany = new Company("LODS", null);
+        expectedCompany.setCompanyId(1);
+        CompanyRepository companyRepository = mock(CompanyRepository.class);
+        when(companyRepository.findById(1)).thenReturn(Optional.of(company));
+        when(companyRepository.save(company)).thenReturn(expectedCompany);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
+
         //when
-        when(companyRepository.save(companyUpdate)).thenReturn(companyUpdate);
-        Company actual = companyService.updateCompany(companyUpdate.getCompanyId(), companyUpdate);
+        Company updatedCompany = companyService.updateCompany(company.getCompanyId(), expectedCompany);
 
         //then
-        assertEquals(69, actual.getCompanyId());
-        assertEquals("MIS", actual.getCompanyName());
-        assertEquals(1, actual.getNumOfEmployees());
-        assertEquals(Collections.singletonList(employee), actual.getEmployeeList());
+        assertSame(expectedCompany, updatedCompany);
     }
 
     @Test
     void should_return_company_when_get_given_a_company_id() {
         //given
-        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
+        Company companyRequest = new Company("LODS", Collections.singletonList(new Employee()));
 
         //when
         when(companyRepository.findById(companyRequest.getCompanyId())).thenReturn(java.util.Optional.of(companyRequest));
@@ -84,7 +88,8 @@ class CompanyServiceTest {
     @Test
     void should_remove_employee_when_delete_given_employee_id() {
         //given
-        Company companyRequest = new Company(69, "LODS", Collections.singletonList(new Employee()));
+        Company companyRequest = new Company("LODS", Collections.singletonList(new Employee()));
+        companyRequest.setCompanyId(69);
 
         //when
         companyService.deleteCompany(companyRequest.getCompanyId());
@@ -99,12 +104,11 @@ class CompanyServiceTest {
         //given
         Employee firstEmployee = new Employee(1, "Vea", 22, "Female", 1000000);
         Employee secondEmployee = new Employee(2, "Joseph", 21, "Male", 1000000);
-        firstEmployee.setCompanyId(69);
-        secondEmployee.setCompanyId(69);
-        Company companyRequest = new Company(69, "LODS", asList(firstEmployee, secondEmployee));
+        Company companyRequest = new Company("LODS", asList(firstEmployee, secondEmployee));
+        companyRequest.setCompanyId(69);
 
         //when
-        when(companyRepository.findById(companyRequest.getCompanyId())).thenReturn(java.util.Optional.of(companyRequest));
+        when(companyRepository.findById(companyRequest.getCompanyId())).thenReturn(Optional.of(companyRequest));
         List<Employee> actual = companyService.getEmployeesByCompanyId(69);
         //then
         assertSame(2, actual.size());
@@ -113,9 +117,9 @@ class CompanyServiceTest {
     @Test
     void should_return_page_1_and_2_for_companies_when_pagination_given_page_size_1_page_size_2() {
         //given
-        Company company1 = new Company(69, "LODS", Collections.singletonList(new Employee()));
-        Company company2 = new Company(69, "MIS", Collections.singletonList(new Employee()));
-        Company company3 = new Company(69, "MIS", Collections.singletonList(new Employee()));
+        Company company1 = new Company("LODS", Collections.singletonList(new Employee()));
+        Company company2 = new Company("MIS", Collections.singletonList(new Employee()));
+        Company company3 = new Company("MIS", Collections.singletonList(new Employee()));
         Page<Company> companyPage = mock(Page.class);
         //when
         when(companyRepository.save(company1)).thenReturn(company1);

@@ -33,8 +33,9 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Company addCompany(@RequestBody Company company) {
-        return companyService.create(company);
+    public CompanyResponse addCompany(@RequestBody CompanyRequest companyRequest) {
+        Company company = companyMapper.toEntity(companyRequest);
+        return companyMapper.toResponse(companyService.create(company));
     }
 
     @GetMapping("/{companyId}/employeeList")
@@ -43,15 +44,15 @@ public class CompanyController {
     }
 
     @GetMapping("/{companyId}")
-    public CompanyResponse getCompany(@PathVariable CompanyRequest companyRequest) {
-        Company company = companyMapper.toEntity(companyRequest);
-        Company createdCompany = companyService.create(company);
-        return companyMapper.toResponse(createdCompany);
+    public CompanyResponse getCompany(@PathVariable("companyId") Integer companyId) {
+        return companyMapper.toResponse(companyService.getCompany(companyId));
     }
 
     @PutMapping("/{companyId}")
-    public CompanyResponse updateCompany(@PathVariable Integer companyId) {
-        return companyMapper.toResponse(companyService.getCompany(companyId));
+    public CompanyResponse updateCompany(@PathVariable("companyId") Integer companyId, @RequestBody CompanyRequest companyRequest) {
+        Company company = companyMapper.toEntity(companyRequest);
+        Company updatedCompany = companyService.updateCompany(companyId, company);
+        return companyMapper.toResponse(updatedCompany);
     }
 
     @GetMapping("/{companyId}/employees")

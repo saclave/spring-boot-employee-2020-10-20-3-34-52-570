@@ -33,8 +33,11 @@ public class CompanyService {
     }
 
     public Company updateCompany(Integer companyId, Company companyRequest) {
-        companyRequest.setCompanyId(companyId);
-        return companyRepository.save(companyRequest);
+        Company company = companyRepository.findById(companyId).orElseThrow(() ->
+                new CompanyNotFoundException(COMPANY_NOT_FOUND));
+
+        company.setCompanyName(companyRequest.getCompanyName());
+        return companyRepository.save(company);
     }
 
     public Company getCompany(Integer companyId) {
