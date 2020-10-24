@@ -1,6 +1,4 @@
-package com.thoughtworks.springbootemployee.dto;
-
-import com.thoughtworks.springbootemployee.model.Employee;
+package com.thoughtworks.springbootemployee.model;
 
 import javax.persistence.*;
 import java.util.List;

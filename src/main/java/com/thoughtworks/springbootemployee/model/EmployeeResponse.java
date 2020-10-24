@@ -1,4 +1,4 @@
-package com.thoughtworks.springbootemployee.dto;
+package com.thoughtworks.springbootemployee.model;
 
 
 public class EmployeeResponse {
