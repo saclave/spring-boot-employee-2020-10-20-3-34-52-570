@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -44,7 +45,7 @@ class CompanyIntegrationTest {
         //then
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].companyId").isNumber())
+                .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].companyName").value("LODS"))
                 .andExpect(jsonPath("$[0].employeeList").isEmpty());
     }
@@ -58,52 +59,52 @@ class CompanyIntegrationTest {
         Company createdCompany = companyRepository.save(company);
 
         //then
-        mockMvc.perform(get("/companies/{companyId}", createdCompany.getId()))
+        mockMvc.perform(get("/companies/{id}", createdCompany.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.companyId").isNumber())
+                .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.companyName").value("LODS"))
                 .andExpect(jsonPath("$.employeeList").isEmpty());
     }
 
-//    @Test
-//    void should_return_specific_employees_when_get_employees_under_company_given_get_company_employee_request() throws Exception {
-//        String companyJson = "{\n" +
-//                "    \"companyName\": \"OOCL\",\n" +
-//                "    \"employees\": [\n" +
-//                "        {\n" +
-//                "            \"name\": \"prince\",\n" +
-//                "            \"age\": 22,\n" +
-//                "            \"gender\": \"male\",\n" +
-//                "            \"salary\": 250000\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"vea\",\n" +
-//                "            \"age\": 21,\n" +
-//                "            \"gender\": \"female\",\n" +
-//                "            \"salary\": 250000\n" +
-//                "        }\n" +
-//                "    ]\n" +
-//                "}";
-//
-//        //when then
-//        mockMvc.perform(post("/companies")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(companyJson))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.companyId").isNumber())
-//                .andExpect(jsonPath("$.companyName").value("OOCL"))
-//                .andExpect(jsonPath("$.employees").isNotEmpty())
-//                .andExpect(jsonPath("$.employees[0].id").isNumber())
-//                .andExpect(jsonPath("$.employees[0].name").value("prince"))
-//                .andExpect(jsonPath("$.employees[0].age").value(22))
-//                .andExpect(jsonPath("$.employees[0].gender").value("male"))
-//                .andExpect(jsonPath("$.employees[0].salary").value(250000))
-//                .andExpect(jsonPath("$.employees[1].id").isNumber())
-//                .andExpect(jsonPath("$.employees[1].name").value("vea"))
-//                .andExpect(jsonPath("$.employees[1].age").value(21))
-//                .andExpect(jsonPath("$.employees[1].gender").value("female"))
-//                .andExpect(jsonPath("$.employees[1].salary").value(250000));
-//    }
+    @Test
+    void should_return_specific_employees_when_get_employees_under_company_given_get_company_employee_request() throws Exception {
+        String companyJson = "{\n" +
+                "    \"companyName\": \"LODS\",\n" +
+                "    \"employeeList\": [\n" +
+                "        {\n" +
+                "            \"name\": \"prince\",\n" +
+                "            \"age\": 22,\n" +
+                "            \"gender\": \"male\",\n" +
+                "            \"salary\": 250000\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"name\": \"vea\",\n" +
+                "            \"age\": 21,\n" +
+                "            \"gender\": \"female\",\n" +
+                "            \"salary\": 250000\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+
+        //when then
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(companyJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value("LODS"))
+                .andExpect(jsonPath("$.employeeList").isNotEmpty())
+                .andExpect(jsonPath("$.employeeList[0].id").isNumber())
+                .andExpect(jsonPath("$.employeeList[0].name").value("prince"))
+                .andExpect(jsonPath("$.employeeList[0].age").value(22))
+                .andExpect(jsonPath("$.employeeList[0].gender").value("male"))
+                .andExpect(jsonPath("$.employeeList[0].salary").value(250000))
+                .andExpect(jsonPath("$.employeeList[1].id").isNumber())
+                .andExpect(jsonPath("$.employeeList[1].name").value("vea"))
+                .andExpect(jsonPath("$.employeeList[1].age").value(21))
+                .andExpect(jsonPath("$.employeeList[1].gender").value("female"))
+                .andExpect(jsonPath("$.employeeList[1].salary").value(250000));
+    }
 
 //    @Test
 //    void should_delete_company_when_delete_request_given_delete_company_request() throws Exception {
