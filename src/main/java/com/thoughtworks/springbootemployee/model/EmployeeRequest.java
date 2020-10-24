@@ -5,35 +5,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+
+public class EmployeeRequest {
+
     private Integer companyId;
     private String name;
     private Integer age;
     private String gender;
     private Integer salary;
 
-    public Employee() {
+    public EmployeeRequest() {
     }
 
-    public Employee(Integer id, String name, Integer age, String gender, Integer salary) {
-        this.id = id;
+    public EmployeeRequest(String name, Integer age, String gender, Integer salary) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.salary = salary;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getCompanyId() {
         return companyId;
@@ -67,7 +57,9 @@ public class Employee {
         this.gender = gender;
     }
 
-    public Integer getSalary() { return salary; }
+    public Integer getSalary() {
+        return salary;
+    }
 
     public void setSalary(Integer salary) {
         this.salary = salary;
