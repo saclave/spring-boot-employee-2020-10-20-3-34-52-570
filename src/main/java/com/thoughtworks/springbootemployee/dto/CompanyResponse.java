@@ -7,11 +7,13 @@ import java.util.List;
 public class CompanyResponse {
     private Integer id;
     private String companyName;
+    private Integer numOfEmployees;
     private List<Employee> employeeList;
 
     public CompanyResponse(String companyName, List<Employee> employeeList) {
         this.companyName = companyName;
         this.employeeList = employeeList;
+        numOfEmployees = this.employeeList.size();
     }
 
     public CompanyResponse() {
@@ -26,7 +28,7 @@ public class CompanyResponse {
     }
 
     public Integer getNumOfEmployees() {
-        return employeeList.size();
+        return numOfEmployees;
     }
 
     public Integer getId() {
