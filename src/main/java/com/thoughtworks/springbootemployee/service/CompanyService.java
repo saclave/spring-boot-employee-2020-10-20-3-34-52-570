@@ -1,7 +1,11 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
+import com.thoughtworks.springbootemployee.exception.EmployeeNotFoundException;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.CompanyRequest;
+import com.thoughtworks.springbootemployee.model.CompanyResponse;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -10,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundException.COMPANY_NOT_FOUND;
 
@@ -17,28 +22,40 @@ import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundExcep
 public class CompanyService {
     private EmployeeRepository employeeRepository;
     private CompanyRepository companyRepository;
+    private CompanyMapper companyMapper;
+    private List<Company> companies;
+    private Company savedCompany;
 
-    public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository) {
+    public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository,
+                          CompanyMapper companyMapper) {
         this.companyRepository = companyRepository;
         this.employeeRepository = employeeRepository;
+        this.companyMapper = companyMapper;
     }
 
 
-    public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyResponse> getAllCompanies() {
+        companies = companyRepository.findAll();
+        return companies.stream().map(companyMapper::toResponse).collect(Collectors.toList());
     }
 
-    public Company create(Company company) {
-        return companyRepository.save(company);
+    public CompanyResponse create(CompanyRequest companyRequest) {
+        savedCompany = companyRepository.save(companyMapper.toEntity(companyRequest));
+        return companyMapper.toResponse(savedCompany);
     }
 
-    public Company updateCompany(Integer companyId, Company companyRequest) {
-        companyRequest.setCompanyId(companyId);
-        return companyRepository.save(companyRequest);
+    public CompanyResponse updateCompany(Integer companyId, CompanyRequest companyRequest) {
+        companyRepository.findById(companyId).orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND));
+
+        savedCompany = companyRepository.save(companyMapper.toEntity(companyRequest));
+        return companyMapper.toResponse(savedCompany);
     }
 
-    public Company getCompany(Integer companyId) {
-        return companyRepository.findById(companyId).orElseThrow(()-> new CompanyNotFoundException(COMPANY_NOT_FOUND));
+    public CompanyResponse getCompany(Integer companyId) {
+        savedCompany = companyRepository.findById(companyId).orElseThrow(()->
+                new CompanyNotFoundException(COMPANY_NOT_FOUND));
+
+        return companyMapper.toResponse(savedCompany);
     }
 
     public void deleteCompany(Integer companyId) {

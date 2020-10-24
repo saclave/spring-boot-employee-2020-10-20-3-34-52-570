@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.CompanyRequest;
+import com.thoughtworks.springbootemployee.model.CompanyResponse;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
@@ -21,14 +23,14 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> getCompanyList() {
+    public List<CompanyResponse> getCompanyList() {
         return companyService.getAllCompanies();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Company addCompany(@RequestBody Company company) {
-        return companyService.create(company);
+    public CompanyResponse addCompany(@RequestBody CompanyRequest companyRequest) {
+        return companyService.create(companyRequest);
     }
 
     @GetMapping("/{companyId}/employeeList")
@@ -37,12 +39,12 @@ public class CompanyController {
     }
 
     @GetMapping("/{companyId}")
-    public Company getCompany(@PathVariable int companyId) {
+    public CompanyResponse getCompany(@PathVariable int companyId) {
         return companyService.getCompany(companyId);
     }
 
     @PutMapping("/{companyId}")
-    public Company updateCompany(@PathVariable Integer companyId, @RequestBody Company companyUpdate) {
+    public CompanyResponse updateCompany(@PathVariable Integer companyId, @RequestBody CompanyRequest companyUpdate) {
         return companyService.updateCompany(companyId, companyUpdate);
     }
 

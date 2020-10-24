@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.model.EmployeeRequest;
+import com.thoughtworks.springbootemployee.model.EmployeeResponse;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +19,23 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getEmployeeList() {
+    public List<EmployeeResponse> getEmployeeList() {
         return employeeService.getAllEmployees();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee addEmployee(@RequestBody Employee employee) {
+    public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employee) {
         return employeeService.create(employee);
     }
 
     @GetMapping("/{employeeId}")
-    public Employee getEmployee(@PathVariable int employeeId) {
+    public EmployeeResponse getEmployee(@PathVariable int employeeId) {
         return employeeService.getEmployee(employeeId);
     }
 
     @PutMapping("/{employeeId}")
-    public Employee updateEmployee(@PathVariable Integer employeeId, @RequestBody Employee employeeUpdate) {
+    public EmployeeResponse updateEmployee(@PathVariable Integer employeeId, @RequestBody Employee employeeUpdate) {
         return employeeService.update(employeeId, employeeUpdate);
     }
 
