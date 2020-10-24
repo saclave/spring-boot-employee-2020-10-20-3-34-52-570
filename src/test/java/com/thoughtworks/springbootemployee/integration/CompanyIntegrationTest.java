@@ -28,6 +28,8 @@ class CompanyIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private Company company;
+    private Company createdCompany;
 
     @AfterEach
     void tearDown() {
@@ -37,7 +39,7 @@ class CompanyIntegrationTest {
     @Test
     void should_return_list_of_companies_when_get_all_companies_given_get_request() throws Exception {
         //given
-        Company company = new Company("LODS", Collections.emptyList());
+        company = new Company("LODS", Collections.emptyList());
 
         //when
         companyRepository.save(company);
@@ -53,10 +55,10 @@ class CompanyIntegrationTest {
     @Test
     void should_return_company_when_get_specific_company_given_get_company_request() throws Exception {
         //given
-        Company company = new Company("LODS", Collections.emptyList());
+        company = new Company("LODS", Collections.emptyList());
 
         //when
-        Company createdCompany = companyRepository.save(company);
+        createdCompany = companyRepository.save(company);
 
         //then
         mockMvc.perform(get("/companies/{id}", createdCompany.getId()))
@@ -131,8 +133,8 @@ class CompanyIntegrationTest {
     @Test
     void should_get_given_updated_company_name_when_update_company_id() throws Exception {
         //given
-        Company company = new Company("OOCL", Collections.emptyList());
-        Company createdCompany = companyRepository.save(company);
+        company = new Company("OOCL", Collections.emptyList());
+        createdCompany = companyRepository.save(company);
 
         String companyUpdateJson = "{\"companyName\": \"LODS\"}";
 

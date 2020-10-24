@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
+import com.thoughtworks.springbootemployee.exception.FieldIsNullException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.thoughtworks.springbootemployee.exception.CompanyNotFoundException.COMPANY_NOT_FOUND;
+import static com.thoughtworks.springbootemployee.exception.FieldIsNullException.FIELD_IS_NULL;
 
 @Service
 public class CompanyService {
@@ -36,8 +38,16 @@ public class CompanyService {
         Company company = companyRepository.findById(companyId).orElseThrow(() ->
                 new CompanyNotFoundException(COMPANY_NOT_FOUND));
 
+        validateCompanyName(companyRequest.getCompanyName());
+
         company.setCompanyName(companyRequest.getCompanyName());
         return companyRepository.save(company);
+    }
+
+    private void validateCompanyName(String name) {
+        if (name == null) {
+            throw new FieldIsNullException(FIELD_IS_NULL);
+        }
     }
 
     public Company getCompany(Integer companyId) {
