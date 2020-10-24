@@ -155,9 +155,6 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$[1].gender").value("male"))
                 .andExpect(jsonPath("$[1].salary").value(500))
                 .andExpect(jsonPath("$[2].id").doesNotExist());
-
-        List<Employee> employees = employeeRepository.findAll();
-        Assertions.assertEquals(3, employees.size());
     }
 
     @Test
@@ -189,5 +186,4 @@ class EmployeeIntegrationTest {
         List<Employee> employees = employeeRepository.findAll();
         Assertions.assertEquals(3, employees.size());
     }
-
 }
