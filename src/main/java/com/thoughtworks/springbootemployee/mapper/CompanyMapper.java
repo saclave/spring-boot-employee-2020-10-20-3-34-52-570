@@ -6,9 +6,6 @@ import com.thoughtworks.springbootemployee.model.Company;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class CompanyMapper {
 
@@ -23,11 +20,4 @@ public class CompanyMapper {
         BeanUtils.copyProperties(company, companyResponse);
         return companyResponse;
     }
-
-    public List<CompanyResponse> toResponseList(List<Company> companies) {
-        return companies.stream()
-                .map(this::toResponse)
-                .collect(Collectors.toList());
-    }
-
 }

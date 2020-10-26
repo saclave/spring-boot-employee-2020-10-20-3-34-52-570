@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
@@ -23,7 +24,9 @@ public class EmployeeController {
 
     @GetMapping
     public List<EmployeeResponse> getEmployeeList() {
-        return employeeMapper.toResponseList(employeeService.getAllEmployees());
+        return employeeService.getAllEmployees().stream()
+                .map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -53,11 +56,15 @@ public class EmployeeController {
 
     @GetMapping(params = "gender")
     public List<EmployeeResponse> getEmployeeGender(@RequestParam("gender") String gender) {
-        return employeeMapper.toResponseList(employeeService.getEmployeesByGender(gender));
+        return employeeService.getEmployeesByGender(gender).stream()
+                .map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public List<EmployeeResponse> pagination(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
-        return employeeMapper.toResponseList(employeeService.getPaginatedEmployee(page, pageSize));
+        return employeeService.getPaginatedEmployee(page, pageSize).stream()
+                .map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }

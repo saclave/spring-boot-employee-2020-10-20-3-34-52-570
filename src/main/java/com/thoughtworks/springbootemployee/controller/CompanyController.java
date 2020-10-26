@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
@@ -40,7 +41,9 @@ public class CompanyController {
 
     @GetMapping("/{companyId}/employeeList")
     public List<CompanyResponse> getEmployeeList() {
-        return companyMapper.toResponseList(companyService.getAllCompanies());
+        return companyService.getAllCompanies().stream()
+                .map(companyMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{companyId}")
@@ -57,7 +60,9 @@ public class CompanyController {
 
     @GetMapping("/{companyId}/employees")
     public List<EmployeeResponse> getEmployeesByCompanyId(@PathVariable("companyId") Integer companyId) {
-        return employeeMapper.toResponseList(companyService.getEmployeesByCompanyId(companyId));
+        return companyService.getEmployeesByCompanyId(companyId).stream()
+                .map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{companyId}")
@@ -72,6 +77,8 @@ public class CompanyController {
 
     @GetMapping(params = {"page", "pageSize"})
     public List<CompanyResponse> getPaginated(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
-        return companyMapper.toResponseList(companyService.getPaginationByCompany(page, pageSize));
+        return companyService.getPaginationByCompany(page, pageSize).stream()
+                .map(companyMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }
